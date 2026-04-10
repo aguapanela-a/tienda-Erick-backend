@@ -22,6 +22,7 @@ public class EntidadMonto {
     private TipoMonto tipo;
     private Date fecha;
 
+    //mucho a uno: crea una columna "id_clientte" relacionando cvarios montos a un cliente
     @ManyToOne
     @JoinColumn(name ="id_cliente")
     private EntidadCliente cliente;
