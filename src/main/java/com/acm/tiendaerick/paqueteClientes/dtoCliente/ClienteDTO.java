@@ -2,16 +2,19 @@ package com.acm.tiendaerick.paqueteClientes.dtoCliente;
 
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public record ClienteDTO(
 
-        @NotBlank(message = "El ID del cliente no puede estar vacío")
-        long id_cliente,
+        @PositiveOrZero(message = "El ID del cliente no puede estar vacío")
+        Long id_cliente,
 
         @NotBlank(message = "El nombre del cliente no puede estar vacío")
         String nombre,
 
-        @NotBlank(message = "El tipo de cliente no puede estar vacío")
+        @NotNull(message = "El tipo de cliente  es obligatorio")
         TipoCliente tipo_cliente)
 {}
 
