@@ -19,6 +19,8 @@ public class EntidadMonto {
 
     private String descripcion;
     private Double valor;
+
+    @Enumerated(EnumType.STRING) //Esto es para la BD lo lea como String y no como número
     private TipoMonto tipo;
     private Date fecha;
 
