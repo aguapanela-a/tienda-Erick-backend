@@ -9,7 +9,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 public record ClienteDTO(
 
         @PositiveOrZero(message = "El ID del cliente no puede estar vacío")
-        Long id_cliente,
+        long id_cliente,
 
         @NotBlank(message = "El nombre del cliente no puede estar vacío")
         String nombre,

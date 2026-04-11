@@ -7,7 +7,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 public record TipoClienteDTO(
         @PositiveOrZero(message = "El id del cliente no puede ser negativo")
-        Long id_cliente,
+        long id_cliente,
 
         @NotNull(message = "El tipo de cliente no puede ser nulo")
         TipoCliente tipo_cliente

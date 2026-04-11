@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 
 public record MontoDeClienteDTO(
         @Positive(message = "El id del monto no puede estar vacío")
-        Long id_monto,
+        long id_monto,
 
         @Positive (message="El id del cliente no puede estar vacío")
-        Long id_cliente,
+        long id_cliente,
 
         String descripcion,
 

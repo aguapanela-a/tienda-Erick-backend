@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 public record MontoDTO(
         @PositiveOrZero(message = "El id del monto no puede ser negativo")
-        Long id_monto,
+        long id_monto,
 
         String descripcion,
 

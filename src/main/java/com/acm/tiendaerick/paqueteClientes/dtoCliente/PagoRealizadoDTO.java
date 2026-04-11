@@ -5,10 +5,10 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 public record PagoRealizadoDTO(
         @PositiveOrZero(message = "El id del cliente no puede ser negativo")
-        Long id_cliente,
+        long id_cliente,
 
         @PositiveOrZero(message = "El saldo actual no puede ser negativo")
-        Long saldo_actual,
+        long saldo_actual,
 
         @NotBlank(message = "El mensaje de confirmación no puede estar vacío")
         String mensaje

@@ -8,7 +8,7 @@ import java.util.List;
 
 public record DeudaDTO(
         @PositiveOrZero(message = "El total no puede ser negativo")
-        Long total,
+        long total,
 
         List<MontoDTO> movimientos) {
 }
