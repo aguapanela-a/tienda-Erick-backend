@@ -1,18 +1,29 @@
 package com.acm.tiendaerick.paqueteClientes.entidad;
 
-import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
-import com.acm.tiendaerick.paqueteMontos.entidad.EntidadMonto;
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.math.BigDecimal;
 import java.util.List;
+
+import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
+import com.acm.tiendaerick.paqueteMontos.entidad.EntidadMonto;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Table(name = "clientes") //nombre de la tabla
 @Getter @Setter // generarlos automáticamente
 @NoArgsConstructor //constructor sin argumentos para que JPA lo use
 @AllArgsConstructor //constructor con argumentos para que nosotros lo usemos
-@Builder //genera el patrón builder usando @AllArgsConstructor
+@SuperBuilder //genera el patrón builder usando @AllArgsConstructor
 @Entity //le dice al JPA que esto es una entidad pa que la guarde
 public class EntidadCliente {
     @Id
