@@ -22,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 public class EntidadCliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //para que la BD genere los id automáticamente
-    private Long id_cliente;
+    private long id_cliente;
 
     private String nombre;
 
