@@ -6,13 +6,7 @@ import java.util.List;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.entidad.EntidadMonto;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,12 +22,14 @@ import lombok.experimental.SuperBuilder;
 public class EntidadCliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //para que la BD genere los id automáticamente
-    private Long id_cliente;
+    private long id_cliente;
 
     private String nombre;
-    private TipoCliente tipo_cliente;
-    private double deuda;
 
+    @Enumerated(EnumType.STRING) //Esto es para la BD lo lea como String y no como número
+    private TipoCliente tipo_cliente;
+
+    private double deuda;
     private BigDecimal saldo_actual;
 
     //cascade = CascadeType.ALL es pa que las cosas que se le hagan al cliente también se le hagan a cada monto
