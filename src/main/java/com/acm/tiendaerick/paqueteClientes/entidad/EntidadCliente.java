@@ -24,6 +24,7 @@ public class EntidadCliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //para que la BD genere los id automáticamente
     private long id_cliente;
 
+    @Column(unique = true)
     private String nombre;
 
     @Enumerated(EnumType.STRING) //Esto es para la BD lo lea como String y no como número
