@@ -28,7 +28,7 @@ public class ControladorDeExcepciones {
          //Extracción de mensajes importantes
          String detalles = ex.getBindingResult().getFieldErrors().stream()
                  .map(error ->error.getField() + ": " + error.getDefaultMessage())
-                 .collect(Collectors.joining());
+                 .collect(Collectors.joining(", "));
 
          ErrorDTO errorValidacion = new ErrorDTO(HttpStatus.BAD_REQUEST.value(),"Error de validación:"+ detalles);
 
