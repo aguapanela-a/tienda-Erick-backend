@@ -18,4 +18,4 @@ public record ClienteDTO(
         TipoCliente tipo_cliente)
 {}
 
-//toca poner anotaciòn @Valid en los argumentos del controlador
+//toca poner anotación @Valid en los argumentos del controlador

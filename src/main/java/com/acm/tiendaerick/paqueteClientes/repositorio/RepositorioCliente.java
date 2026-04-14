@@ -3,14 +3,14 @@ package com.acm.tiendaerick.paqueteClientes.repositorio;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCliente;
+import org.springframework.data.jpa.repository.Query;
 
 public interface RepositorioCliente extends JpaRepository<EntidadCliente, Long> {
 
 
-    //TODO:
-    //Toca hacer el SQL para ponerlo en español e igual al UML xd
-    //Solo verifica si existe un cliente con ese nombre igunorando las mayúsculas
-    boolean existsEntidadClienteByNombreContainingIgnoreCase(String nombre);
+    //sentencia JPQA: Selecciona si el conteo de clientes es mayor a cero dónde el nombre coincida
+    @Query("SELECT count(cliente) > 0 FROM EntidadCliente cliente where LOWER(cliente.nombre) = LOWER(:nombre) ")
+    boolean existeClientePorNombre(String nombre);
 
     
 }

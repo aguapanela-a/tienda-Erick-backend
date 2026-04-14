@@ -16,6 +16,8 @@ public class ServicioCRUDCliente {
     }
 
 //    public ClienteDTO registrarCliente(ClienteRegistroDTO registroDTO) {
-//        repositorioCliente.existsEntidadClienteByNombreContainingIgnoreCase(registroDTO.nombre());
+//        if(repositorioCliente.existeClientePorNombre(registroDTO.nombre())){
+//
+//        }
 //    }
 }

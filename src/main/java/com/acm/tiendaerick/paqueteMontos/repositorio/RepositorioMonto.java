@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface RepositorioMonto extends JpaRepository<EntidadMonto, Long>{
     
     //Buscar todos los montos de un cliente
-    //@Query(value = "SELECT * FROM montos WHERE id_cliente = ?1", nativeQuery=true)  //Query de la consulta
+    //@Query(value = "SELECT * FROM montos WHERE id_cliente =?1", nativeQuery=true)  //Query de la consulta
     @Query("SELECT montos FROM EntidadMonto montos WHERE montos.cliente.id_cliente = :id_cliente ")
     public List<EntidadMonto> buscarPorCliente(@Param("id_cliente") long id_cliente);    //Podemos hacer que el tipo sea Page para realizar paginación
 
