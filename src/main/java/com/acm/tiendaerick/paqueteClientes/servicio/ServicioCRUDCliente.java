@@ -4,6 +4,7 @@ import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.PagoRealizadoDTO;
+import com.acm.tiendaerick.paqueteClientes.dtoCliente.TipoClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCliente;
 import com.acm.tiendaerick.paqueteClientes.repositorio.RepositorioCliente;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ServicioCRUDCliente {
-    private RepositorioCliente repositorioCliente;
+    private final RepositorioCliente repositorioCliente;
 
     @Autowired
     public ServicioCRUDCliente( RepositorioCliente repositorioCliente) {
@@ -87,6 +88,9 @@ public class ServicioCRUDCliente {
         return confirmacion;
     }
 
-
+    public TipoClienteDTO obtenerTipoClientePorId(long id){
+        EntidadCliente cliente = validarExistencia(id);
+        return new TipoClienteDTO(cliente.getId_cliente(), cliente.getTipo_cliente());
+    }
 
 }
