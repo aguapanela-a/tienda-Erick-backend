@@ -5,7 +5,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
 
-public record PagoRealizadoDTO(
+public record ConfirmacionDTO(
         @PositiveOrZero(message = "El id del cliente no puede ser negativo")
         long id_cliente,
 
@@ -13,6 +13,9 @@ public record PagoRealizadoDTO(
         BigDecimal saldo_actual,
 
         @NotBlank(message = "El mensaje de confirmación no puede estar vacío")
-        String mensaje
+        String mensaje,
+
+        @NotBlank(message = "El nombre no puede estar vacío")
+        String nombre
 )
 {}

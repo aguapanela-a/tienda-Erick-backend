@@ -3,7 +3,7 @@ package com.acm.tiendaerick.paqueteClientes.servicio;
 import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;
-import com.acm.tiendaerick.paqueteClientes.dtoCliente.PagoRealizadoDTO;
+import com.acm.tiendaerick.paqueteClientes.dtoCliente.ConfirmacionDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.TipoClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCliente;
 import com.acm.tiendaerick.paqueteClientes.repositorio.RepositorioCliente;
@@ -74,13 +74,13 @@ public class ServicioCRUDCliente {
     }
 
 
-    public PagoRealizadoDTO eliminarCliente(@NonNull ClienteDTO dtoEntrada) {
+    public ConfirmacionDTO eliminarCliente(@NonNull ClienteDTO dtoEntrada) {
 
         //Verifica que exista
         EntidadCliente clienteAEliminar = validarExistencia(dtoEntrada.id_cliente());
 
         //si existe crea DTO respuesta
-        PagoRealizadoDTO confirmacion = new PagoRealizadoDTO(clienteAEliminar.getId_cliente(), clienteAEliminar.getSaldo_actual(), "Cliente " + clienteAEliminar.getNombre() + " eliminado correctamente");
+        ConfirmacionDTO confirmacion = new ConfirmacionDTO(clienteAEliminar.getId_cliente(), clienteAEliminar.getSaldo_actual(), "Cliente " + clienteAEliminar.getNombre() + " eliminado correctamente", clienteAEliminar.getNombre());
 
         //elimina la entidad
         repositorioCliente.delete(clienteAEliminar);
