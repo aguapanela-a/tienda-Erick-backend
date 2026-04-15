@@ -27,7 +27,7 @@ public class ServicioCRUDCliente {
         }
     }
 
-    private EntidadCliente validarExistencia(long id){
+    private @NonNull EntidadCliente validarExistencia(long id){
         return repositorioCliente.findById(id)  //busca el cliente existente por el id del dto que recibe del front
                 .orElseThrow(()->new ExcepcionesTienda("El cliente no existe en el sistema")); //Si no existe esa entidad con ese ID lanza ese error
     }
