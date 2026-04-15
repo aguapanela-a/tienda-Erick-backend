@@ -16,7 +16,7 @@ public record MontoDTO(
         @NotNull(message = "El valor del monto no puede ser nulo")
         BigDecimal valor,
 
-        @NotNull(message = "El tipo del monto no puede ser nulo")
+        @NotNull(message = "El tipo de monto es obligatorio y debe ser un valor válido (ABONO, DEUDA)")
         TipoMonto tipo_monto,
 
         @NotBlank(message = "La fecha del monto no puede estar vacía")
