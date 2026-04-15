@@ -10,7 +10,11 @@ import com.acm.tiendaerick.paqueteClientes.repositorio.RepositorioCliente;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ServicioCRUDCliente {
@@ -27,9 +31,19 @@ public class ServicioCRUDCliente {
         }
     }
 
-    private @NonNull EntidadCliente validarExistencia(long id){
+    public @NonNull EntidadCliente validarExistencia(long id){
         return repositorioCliente.findById(id)  //busca el cliente existente por el id del dto que recibe del front
                 .orElseThrow(()->new ExcepcionesTienda("El cliente no existe en el sistema")); //Si no existe esa entidad con ese ID lanza ese error
+    }
+
+
+    public List<ClienteDTO> buscarPorPrefijo(String prefijo){
+
+        //buscarPorIniciales me devuelve una lista de EntidadesCliente por cada prefijo y luego les hago Stream,
+        // las mapeo a ClienteDTO cada una y las meto a una List
+        return repositorioCliente.buscarPorIniciales(prefijo, Sort.by("nombre"), Limit.of(5)).stream()
+                .map(entidadC -> new ClienteDTO(entidadC.getId_cliente(), entidadC.getNombre(), entidadC.getTipo_cliente()))
+                .toList();
     }
 
 
@@ -74,10 +88,10 @@ public class ServicioCRUDCliente {
     }
 
 
-    public ConfirmacionDTO eliminarCliente(@NonNull ClienteDTO dtoEntrada) {
+    public ConfirmacionDTO eliminarCliente(@NonNull long id) {
 
-        //Verifica que exista
-        EntidadCliente clienteAEliminar = validarExistencia(dtoEntrada.id_cliente());
+        //Verifica que exista (toca hacerlo en el ServicioCliente xd)
+        EntidadCliente clienteAEliminar = validarExistencia(id);
 
         //si existe crea DTO respuesta
         ConfirmacionDTO confirmacion = new ConfirmacionDTO(clienteAEliminar.getId_cliente(), clienteAEliminar.getSaldo_actual(), "Cliente " + clienteAEliminar.getNombre() + " eliminado correctamente", clienteAEliminar.getNombre());
