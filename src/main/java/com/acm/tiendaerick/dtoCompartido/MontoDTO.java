@@ -1,15 +1,16 @@
 package com.acm.tiendaerick.dtoCompartido;
 
+import java.math.BigDecimal;
+
 import com.acm.tiendaerick.paqueteMontos.tipoEnum.TipoMonto;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-import java.math.BigDecimal;
-
 public record MontoDTO(
-        @PositiveOrZero(message = "El id del monto no puede ser negativo")
-        long id_monto,
+        @PositiveOrZero(message = "El id del cliente no puede ser negativo")
+        long id_cliente,
 
         String descripcion,
 
