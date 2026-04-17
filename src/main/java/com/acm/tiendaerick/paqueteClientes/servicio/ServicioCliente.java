@@ -29,10 +29,19 @@ public abstract class ServicioCliente {
     }
 
 
-    protected abstract boolean aplicarPara(TipoCliente tipoCliente);
-    protected abstract void validarReglasDeNegocio(MontoDTO monto);
-    abstract ConfirmacionDTO pagarDeuda(long id);
-    abstract MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto);
+    //métodos que las hijas implementarán
+    public abstract boolean aplicarPara(TipoCliente tipoCliente);
+    public abstract void validarReglasDeNegocio(MontoDTO monto);
+    public abstract ConfirmacionDTO pagarDeuda(long id);
+    public abstract MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto);
+
+
+    //métodok que calcula el monto total -> solo lo usarán las hijas
+    protected BigDecimal calcularDeuda(long id_cliente){
+        return servicioMonto.detalleTodosLosMontos(id_cliente).stream()
+                .map(monto -> monto.valor())
+                .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
+    }
 
 
     public List<ClienteDTO> busquedaCliente(String nombre){
@@ -56,18 +65,22 @@ public abstract class ServicioCliente {
     }
 
 
-//    public ConfirmacionDTO eliminarCliente(ClienteDTO cliente){
-//
-//        crud.validarExistencia(cliente.id_cliente());
-//
-//        BigDecimal deudaDTO = servicioMonto.obtenerDeuda(cliente.id_cliente().getTotal());
-//
-//        if(deudaDTO.compareTo(BigDecimal.ZERO) > 0){
-//            throw new ExcepcionesTienda("No se puede eliminar un cliente con un saldo pendiente a pagar");
-//        }
-//
-//        return crud.eliminarCliente(cliente.id_cliente());
-//    }
+    public DeudaDTO obtenerDeuda(long id_cliente){
+        return new DeudaDTO(calcularDeuda(id_cliente), servicioMonto.detalleTodosLosMontos(id_cliente));
+    }
+
+
+    public ConfirmacionDTO eliminarCliente(ClienteDTO cliente){
+
+        crud.validarExistencia(cliente.id_cliente());
+
+        //compareTo(BigDecimal.ZERO) retorna un -1  si es negativo, 0 si es igual a 0 y 1 si es positivo, entonce al decirle que lace error al ser mayor que 0, solo se cumple si el ]BigDecimal es positovo (el cliente debe dinero)
+        if(calcularDeuda(cliente.id_cliente()).compareTo(BigDecimal.ZERO) > 0){
+            throw new ExcepcionesTienda("No se puede eliminar un cliente con un saldo pendiente a pagar");
+        }
+
+        return crud.eliminarCliente(cliente.id_cliente());
+    }
 
 
 
