@@ -1,10 +1,12 @@
 package com.acm.tiendaerick.paqueteMontos.servicio;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.acm.tiendaerick.paqueteClientes.dtoCliente.DeudaDTO;
 import org.springframework.stereotype.Service;
 
 import com.acm.tiendaerick.dtoCompartido.MontoDTO;
@@ -25,7 +27,20 @@ public class ServicioMonto {
         this.repositorio = repositorio;
     }
 
-    private MontoDeClienteDTO registrarMonto(long id_cliente, MontoDTO monto){
+
+    //métodok que calcula el monto total -> solo lo usarán las hijas
+    public BigDecimal calcularDeuda(long id_cliente){
+        return this.detalleTodosLosMontos(id_cliente).stream()
+                .map(monto -> monto.valor())
+                .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
+    }
+
+
+    public DeudaDTO obtenerDeuda(long id_cliente){
+        return new DeudaDTO(calcularDeuda(id_cliente), this.detalleTodosLosMontos(id_cliente));
+    }
+
+    public MontoDeClienteDTO registrarMonto(long id_cliente, MontoDTO monto){
         //Crear la entidad
         EntidadMonto entidad = crearEntidadDeMontoDTO(id_cliente, monto);
         
@@ -55,7 +70,7 @@ public class ServicioMonto {
     }
 
     //Método para borrar todos los montos
-    public void borrarTodosLosMontos(Long id_cliente){
+    public void borrarTodosLosMontos(long id_cliente){
         this.repositorio.borrarTodosLosMontos(id_cliente);
     }
 
@@ -79,7 +94,7 @@ public class ServicioMonto {
                                      convLocalDateString(entidad_actualizada.getFecha()));
     }
 
-    private EntidadMonto crearEntidadDeMontoDTO(Long id_cliente, MontoDTO monto){
+    private EntidadMonto crearEntidadDeMontoDTO(long id_cliente, MontoDTO monto){
         EntidadMonto entidad = new EntidadMonto();
         
         //Se crea el cliente al que pertenece

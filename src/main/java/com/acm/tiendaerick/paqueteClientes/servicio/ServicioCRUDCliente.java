@@ -2,9 +2,7 @@ package com.acm.tiendaerick.paqueteClientes.servicio;
 
 import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
-import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ConfirmacionDTO;
-import com.acm.tiendaerick.paqueteClientes.dtoCliente.TipoClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCliente;
 import com.acm.tiendaerick.paqueteClientes.repositorio.RepositorioCliente;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
@@ -47,18 +45,13 @@ public class ServicioCRUDCliente {
     }
 
 
-    public ClienteDTO registrarCliente(@NonNull ClienteRegistroDTO registroDTO) {
+    public ClienteDTO registrarCliente(@NonNull EntidadCliente entidadC) {
 
         //Si ya existe ese nombre que lance una ExcepcionesTienda (que en el controlador de excepciones se maneja)
-        validarNombre(registroDTO.nombre());
-
-        //Si lo de arriba no se cumple (no existe ese nombre) crea una nueva entidad a partir del DTO
-        EntidadCliente cliente = new EntidadCliente();
-        cliente.setNombre(registroDTO.nombre());
-        cliente.setTipo_cliente(registroDTO.tipo_cliente());
+        validarNombre(entidadC.getNombre());
 
         //Guarda la entidad (aquí la BD asigna la id)
-        EntidadCliente entidad = repositorioCliente.save(cliente);
+        EntidadCliente entidad = repositorioCliente.save(entidadC);
 
         //Crea el DTO de retorno con la entidad ya guardada <3
         return new ClienteDTO(entidad.getId_cliente(), entidad.getNombre(),entidad.getTipo_cliente());
@@ -102,9 +95,9 @@ public class ServicioCRUDCliente {
         return confirmacion;
     }
 
-    public TipoClienteDTO obtenerTipoClientePorId(long id){
+    public ClienteDTO obtenerClientePorId(long id){
         EntidadCliente cliente = validarExistencia(id);
-        return new TipoClienteDTO(cliente.getId_cliente(), cliente.getTipo_cliente());
+        return new ClienteDTO(cliente.getId_cliente(), cliente.getNombre(), cliente.getTipo_cliente());
     }
 
 }

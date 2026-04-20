@@ -1,5 +1,7 @@
 package com.acm.tiendaerick.paqueteClientes.repositorio;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,5 +20,5 @@ public interface RepositorioCInvitado extends JpaRepository<EntidadCInvitado, Lo
     @Transactional //Para que deje borrar
     //@Query(value = "DELETE FROM expiracion_invitado WHERE fecha_expiracion < ?1", nativeQuery=true)
     @Query("DELETE FROM EntidadCInvitado e WHERE e.fecha_expiracion < :fecha_actual")
-    public void eliminarClienteVencido(@Param("fecha_actual") Date fecha_actual);
+    public void eliminarClienteVencido(@Param("fecha_actual") LocalDateTime fecha_actual);
 }
