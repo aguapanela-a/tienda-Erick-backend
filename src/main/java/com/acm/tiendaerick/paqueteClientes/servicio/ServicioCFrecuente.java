@@ -28,7 +28,7 @@ public class ServicioCFrecuente extends ServicioCliente {
     }
 
 
-    //Unicamente validar que el monto sea positivo, no importa el tipo porque para freceuntes se vale to
+    //Unicamente validar que el monto sea diferente a cero, no importa el tipo porque para freceuntes se vale to
     @Override
     protected void validarReglasDeNegocio(MontoDTO monto) {
         if(monto.valor().compareTo(BigDecimal.ZERO) == 0){
