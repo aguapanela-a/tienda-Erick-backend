@@ -30,7 +30,7 @@ import lombok.Setter;
 public class EntidadMonto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_monto;
+    private long id_monto;
 
     private String descripcion;
     private BigDecimal valor;
