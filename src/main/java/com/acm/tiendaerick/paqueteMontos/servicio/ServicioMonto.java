@@ -6,11 +6,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.acm.tiendaerick.paqueteClientes.dtoCliente.DeudaDTO;
 import org.springframework.stereotype.Service;
 
 import com.acm.tiendaerick.dtoCompartido.MontoDTO;
 import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
+import com.acm.tiendaerick.paqueteClientes.dtoCliente.DeudaDTO;
 import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCliente;
 import com.acm.tiendaerick.paqueteMontos.entidad.EntidadMonto;
 import com.acm.tiendaerick.paqueteMontos.repositorio.RepositorioMonto;
@@ -29,15 +29,17 @@ public class ServicioMonto {
 
 
     //métodok que calcula el monto total -> solo lo usarán las hijas
-    public BigDecimal calcularDeuda(long id_cliente){
-        return this.detalleTodosLosMontos(id_cliente).stream()
-                .map(monto -> monto.valor())
-                .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
+    public BigDecimal calcularDeuda(List<MontoDTO> lista){
+        return lista.stream()
+                    .map(monto -> monto.valor())
+                    .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
     }
 
 
     public DeudaDTO obtenerDeuda(long id_cliente){
-        return new DeudaDTO(calcularDeuda(id_cliente), this.detalleTodosLosMontos(id_cliente));
+        List<MontoDTO> lista = this.detalleTodosLosMontos(id_cliente);
+
+        return new DeudaDTO(calcularDeuda(lista), lista);
     }
 
     public MontoDeClienteDTO registrarMonto(long id_cliente, MontoDTO monto){
@@ -74,9 +76,9 @@ public class ServicioMonto {
         this.repositorio.borrarTodosLosMontos(id_cliente);
     }
 
-    public MontoDeClienteDTO actualizarMontoDeCliente(MontoDeClienteDTO monto){
-        EntidadMonto entidad = repositorio.findById(monto.id_monto())
-                                                      .orElseThrow(() -> new RuntimeException("Monto no encontrado"));
+    public MontoDeClienteDTO actualizarMontoDeCliente(Long id_monto, MontoDTO monto){
+        EntidadMonto entidad = repositorio.findById(id_monto)   //Si lo encuentra, le asigna de una vez sus valores
+                                                    .orElseThrow(() -> new RuntimeException("Monto no encontrado"));
         
         entidad.setDescripcion(monto.descripcion());            //Actualizar la descripcion
         entidad.setValor(monto.valor());                        //Actualizar el valor
