@@ -29,13 +29,13 @@ public class ServicioMonto {
 
 
     //métodok que calcula el monto total -> solo lo usarán las hijas
-    public BigDecimal calcularDeuda(List<MontoDTO> lista){
+    private BigDecimal calcularDeuda(List<MontoDTO> lista){
         return lista.stream()
                     .map(monto -> monto.valor())
                     .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
     }
 
-    public BigDecimal calcularDeuda(Long id_cliente){
+    public BigDecimal calcularDeuda(long id_cliente){
         return this.detalleTodosLosMontos(id_cliente).stream()
                                                      .map(monto -> monto.valor())
                                                      .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
