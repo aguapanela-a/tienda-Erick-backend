@@ -7,7 +7,6 @@ import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ConfirmacionDTO;
 import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCInvitado;
-import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCliente;
 import com.acm.tiendaerick.paqueteClientes.repositorio.RepositorioCInvitado;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.servicio.ServicioMonto;
