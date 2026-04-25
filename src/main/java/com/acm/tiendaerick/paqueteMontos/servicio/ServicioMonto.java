@@ -60,7 +60,7 @@ public class ServicioMonto {
                                      entidad_guardada.getTipo(), convLocalDateString(entidad_guardada.getFecha()));
     }
 
-    public List<MontoDTO> detalleTodosLosMontos(Long idCliente){
+    public List<MontoDTO> detalleTodosLosMontos(long idCliente){
 
         //Obtener todos los montos del cliente
         List<EntidadMonto> entidades = repositorio.buscarPorCliente(idCliente);

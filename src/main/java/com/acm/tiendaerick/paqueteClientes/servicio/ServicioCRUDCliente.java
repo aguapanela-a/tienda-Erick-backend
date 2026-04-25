@@ -12,6 +12,7 @@ import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -100,4 +101,16 @@ public class ServicioCRUDCliente {
         return new ClienteDTO(cliente.getId_cliente(), cliente.getNombre(), cliente.getTipo_cliente());
     }
 
+    public void actualizarSaldoActual(long id_cliente, BigDecimal saldoActualizado) {
+
+        //agarra la entidad Cliente
+        EntidadCliente clienteExistente = validarExistencia(id_cliente);
+
+        //le meto el saldo actualizado
+        clienteExistente.setSaldo_actual(saldoActualizado);
+
+        //vuelvo y guardo
+        repositorioCliente.save(clienteExistente);
+
+    }
 }

@@ -11,10 +11,12 @@ import com.acm.tiendaerick.paqueteClientes.repositorio.RepositorioCInvitado;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.servicio.ServicioMonto;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Service
 public class ServicioCInvitado extends ServicioCliente{
 
     private final RepositorioCInvitado repositorioCInvitado;
@@ -25,14 +27,14 @@ public class ServicioCInvitado extends ServicioCliente{
 
     @Override
     public boolean aplicarPara(TipoCliente tipoCliente) {
-        return tipoCliente.name().equalsIgnoreCase("INVITADO");
+        return tipoCliente == TipoCliente.INVITADO;
     }
 
 
     //Validar que sea mayor que cero y que no sea abono
     @Override
     protected void validarReglasDeNegocio(MontoDTO monto) {
-        if(monto.valor().compareTo(BigDecimal.ZERO) >= 0){
+        if(monto.valor().compareTo(BigDecimal.ZERO) <= 0){
             throw new ExcepcionesTienda("El monto a ingresar debe ser mayor que cero");
         }
         if(monto.tipo_monto().name().equalsIgnoreCase("ABONO")){
@@ -58,7 +60,7 @@ public class ServicioCInvitado extends ServicioCliente{
         servicioMonto.borrarTodosLosMontos(cliente.id_cliente());
         return new ConfirmacionDTO(
                 cliente.id_cliente(),
-                servicioMonto.calcularDeuda(cliente.id_cliente()),
+                crud.validarExistencia(cliente.id_cliente()).getSaldo_actual(),
                 "El pago se ha completado con éxito!",
                 cliente.nombre()
         );

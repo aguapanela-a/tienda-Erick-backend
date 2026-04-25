@@ -11,11 +11,13 @@ import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.servicio.ServicioMonto;
 import com.acm.tiendaerick.paqueteMontos.tipoEnum.TipoMonto;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Service
 public class ServicioCFrecuente extends ServicioCliente {
 
     public ServicioCFrecuente(ServicioCRUDCliente crud, ServicioMonto servicioMonto) {
@@ -24,7 +26,7 @@ public class ServicioCFrecuente extends ServicioCliente {
 
     @Override
     public boolean aplicarPara(TipoCliente tipoCliente) {
-        return tipoCliente.name().equalsIgnoreCase("FRECUENTE");
+        return tipoCliente == TipoCliente.FRECUENTE;
     }
 
 
@@ -52,7 +54,14 @@ public class ServicioCFrecuente extends ServicioCliente {
     @Override
     public MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto) {
         validarReglasDeNegocio(monto);
-        return servicioMonto.registrarMonto(monto.id_cliente(), monto);
+
+        //registra el monto en su tabla (lo relaciona automáticamente al cliente)
+        MontoDeClienteDTO respuesta = servicioMonto.registrarMonto(monto.id_cliente(), monto);
+
+        //Le sumo el valor de la deuda al saldo actual del cliente y se lo guardo
+        crud.actualizarSaldoActual(monto.id_cliente(), servicioMonto.calcularDeuda(monto.id_cliente()));
+
+        return respuesta;
     }
 
 
@@ -60,7 +69,7 @@ public class ServicioCFrecuente extends ServicioCliente {
     @Override
     public ConfirmacionDTO pagarDeuda(ClienteDTO cliente) {
         //guardo la deuda actual
-        BigDecimal deudaActual = servicioMonto.calcularDeuda(cliente.id_cliente());
+        BigDecimal deudaActual = crud.validarExistencia(cliente.id_cliente()).getSaldo_actual();
 
         //Validar que el cliente deba algo, si no debe, pues no se realiza
         if(deudaActual.compareTo(BigDecimal.ZERO) <= 0){
@@ -72,16 +81,16 @@ public class ServicioCFrecuente extends ServicioCliente {
 
         //crear nuevo registro tipo deuda
         MontoDTO montoDeudaDTO = new MontoDTO(cliente.id_cliente(), "Consolidación de deuda anterior", deudaActual, TipoMonto.DEUDA, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        servicioMonto.registrarMonto(cliente.id_cliente(), montoDeudaDTO);
+        gestionarOperacionMonto(montoDeudaDTO);
 
         //crear nuevo registro tipo abono
         MontoDTO montoAbonoDTO = new MontoDTO(cliente.id_cliente(), "Se realizó el pago completo de la deuda", deudaActual.negate(), TipoMonto.ABONO, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        servicioMonto.registrarMonto(cliente.id_cliente(), montoAbonoDTO);
+        gestionarOperacionMonto(montoAbonoDTO);
 
         //Retorna el DTO de confirmación si toodo salió bien
         return new ConfirmacionDTO(
                 cliente.id_cliente(),
-                servicioMonto.calcularDeuda(cliente.id_cliente()),
+                crud.validarExistencia(cliente.id_cliente()).getSaldo_actual(),
                 "Se ha realizado el pago total de la deuda del cliente con éxito!",
                 cliente.nombre()
         );
