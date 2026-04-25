@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @Entity //le dice al JPA que esto es una entidad pa que la guarde
 public class EntidadCliente {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //para que la BD genere los id automáticamente
+    @GeneratedValue(strategy = GenerationType.AUTO) //para que la BD genere los id automáticamente
     private long id_cliente;
 
     @Column(unique = true)

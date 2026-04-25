@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface RepositorioCInvitado extends JpaRepository<EntidadCInvitado, Long>{
 
     @Modifying  //Para avisarle a Spring que este metodo es para modificar
-    @Transactional //Para que deje borrar
+    @Transactional //Para que deje borrar/escribir
     //@Query(value = "DELETE FROM expiracion_invitado WHERE fecha_expiracion < ?1", nativeQuery=true)
     @Query("DELETE FROM EntidadCInvitado e WHERE e.fecha_expiracion < :fecha_actual")
     public void eliminarClienteVencido(@Param("fecha_actual") LocalDateTime fecha_actual);

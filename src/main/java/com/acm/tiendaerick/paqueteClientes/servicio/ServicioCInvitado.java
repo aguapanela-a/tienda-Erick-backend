@@ -10,6 +10,7 @@ import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCInvitado;
 import com.acm.tiendaerick.paqueteClientes.repositorio.RepositorioCInvitado;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.servicio.ServicioMonto;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -67,5 +68,12 @@ public class ServicioCInvitado extends ServicioCliente{
     public MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto) {
         validarReglasDeNegocio(monto);
         return servicioMonto.registrarMonto(monto.id_cliente(), monto);
+    }
+
+
+    //metodo que se ejecuta automáticamente un minuto luego de iniciar la app, y luego cada dos horas: verifica la fecha de exp de todos los inv y borra los que ya expiraron
+    @Scheduled(initialDelay = 60000, fixedRate = 7_200_000)
+    public void autoborrado(){
+        repositorioCInvitado.eliminarClienteVencido(LocalDateTime.now());
     }
 }
