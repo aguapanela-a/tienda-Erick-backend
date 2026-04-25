@@ -13,12 +13,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+@Entity //le dice al JPA que esto es una entidad pa que la guarde
 @Table(name = "clientes") //nombre de la tabla
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter @Setter // generarlos automáticamente
 @NoArgsConstructor //constructor sin argumentos para que JPA lo use
 @AllArgsConstructor //constructor con argumentos para que nosotros lo usemos
 @SuperBuilder //genera el patrón builder usando @AllArgsConstructor
-@Entity //le dice al JPA que esto es una entidad pa que la guarde
 public class EntidadCliente {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //para que la BD genere los id automáticamente
