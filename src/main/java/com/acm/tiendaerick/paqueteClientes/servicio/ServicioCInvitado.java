@@ -57,7 +57,9 @@ public class ServicioCInvitado extends ServicioCliente{
 
     @Override
     public ConfirmacionDTO pagarDeuda(ClienteDTO cliente) {
+
         servicioMonto.borrarTodosLosMontos(cliente.id_cliente());
+        crud.actualizarSaldoActual(cliente.id_cliente(),  BigDecimal.ZERO);
         return new ConfirmacionDTO(
                 cliente.id_cliente(),
                 crud.validarExistencia(cliente.id_cliente()).getSaldo_actual(),
@@ -69,7 +71,14 @@ public class ServicioCInvitado extends ServicioCliente{
     @Override
     public MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto) {
         validarReglasDeNegocio(monto);
-        return servicioMonto.registrarMonto(monto.id_cliente(), monto);
+
+        //registra el monto en su tabla (lo relaciona automáticamente al cliente)
+        MontoDeClienteDTO respuesta = servicioMonto.registrarMonto(monto.id_cliente(), monto);
+
+        //Suma el valor de la deuda actual al saldo actual del cliente y lo guardo
+        crud.actualizarSaldoActual(monto.id_cliente(), servicioMonto.calcularDeuda(monto.id_cliente()));
+
+        return respuesta;
     }
 
 
