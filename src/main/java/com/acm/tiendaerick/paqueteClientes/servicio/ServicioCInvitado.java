@@ -68,18 +68,6 @@ public class ServicioCInvitado extends ServicioCliente{
         );
     }
 
-    @Override
-    public MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto) {
-        validarReglasDeNegocio(monto);
-
-        //registra el monto en su tabla (lo relaciona automáticamente al cliente)
-        MontoDeClienteDTO respuesta = servicioMonto.registrarMonto(monto.id_cliente(), monto);
-
-        //Suma el valor de la deuda actual al saldo actual del cliente y lo guardo
-        crud.actualizarSaldoActual(monto.id_cliente(), servicioMonto.calcularDeuda(monto.id_cliente()));
-
-        return respuesta;
-    }
 
 
     //metodo que se ejecuta automáticamente un minuto luego de iniciar la app, y luego cada dos horas: verifica la fecha de exp de todos los inv y borra los que ya expiraron

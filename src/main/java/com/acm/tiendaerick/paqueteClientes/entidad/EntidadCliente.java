@@ -7,6 +7,7 @@ import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.entidad.EntidadMonto;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,8 @@ public class EntidadCliente {
     private TipoCliente tipo_cliente;
 
     private double deuda;
+
+    @PositiveOrZero
     private BigDecimal saldo_actual;
 
     //cascade = CascadeType.ALL es pa que las cosas que se le hagan al cliente también se le hagan a cada monto

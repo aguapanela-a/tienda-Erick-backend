@@ -28,14 +28,14 @@ public class ControladorMonto {
     }
 
     @PutMapping("/actualizar/{id_monto}")
-    public MontoDeClienteDTO actualizarMontoDeCliente(@PathVariable Long id_monto, @RequestBody MontoDTO monto){
+    public MontoDeClienteDTO actualizarMontoDeCliente(@PathVariable long id_monto, @RequestBody MontoDTO monto){
         
         MontoDeClienteDTO monto_actualizado = this.servicio.actualizarMontoDeCliente(id_monto, monto);
         return monto_actualizado;
     }
 
     @GetMapping("/{id_cliente}")
-    public ResponseEntity<DeudaDTO> obtenerDeuda(@PathVariable Long id_cliente) {
+    public ResponseEntity<DeudaDTO> obtenerDeuda(@PathVariable long id_cliente) {
         DeudaDTO deuda = this.servicio.obtenerDeuda(id_cliente);
         
         if (deuda == null) return ResponseEntity.notFound().build();

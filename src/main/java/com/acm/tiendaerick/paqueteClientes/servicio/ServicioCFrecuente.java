@@ -36,6 +36,9 @@ public class ServicioCFrecuente extends ServicioCliente {
         if(monto.valor().compareTo(BigDecimal.ZERO) == 0){
             throw new ExcepcionesTienda("El monto a ingresar debe ser diferente que cero");
         }
+        if((crud.validarExistencia(monto.id_cliente()).getSaldo_actual().compareTo(BigDecimal.ZERO) + monto.valor().compareTo(BigDecimal.ZERO) < 0 )){
+            throw  new ExcepcionesTienda("El saldo total del cliente no puede ser negativo");
+        }
     }
 
 
@@ -51,51 +54,29 @@ public class ServicioCFrecuente extends ServicioCliente {
     }
 
 
-    @Override
-    public MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto) {
-        validarReglasDeNegocio(monto);
-
-        //registra el monto en su tabla (lo relaciona automáticamente al cliente)
-        MontoDeClienteDTO respuesta = servicioMonto.registrarMonto(monto.id_cliente(), monto);
-
-
-        //Le sumo el valor de la deuda al saldo actual del cliente y se lo guardo
-        crud.actualizarSaldoActual(monto.id_cliente(), servicioMonto.calcularDeuda(monto.id_cliente()));
-
-        return respuesta;
-    }
-
-
     @Transactional //Etiqueta para que Spring se asegure que realice toda la lógica correctamente, si algo falla deshace los cambios
     @Override
     public ConfirmacionDTO pagarDeuda(ClienteDTO cliente) {
+
         //guardo la deuda actual
-        BigDecimal deudaActual = crud.validarExistencia(cliente.id_cliente()).getSaldo_actual();
+        BigDecimal deudaActual = servicioMonto.calcularDeuda(cliente.id_cliente());
 
         //Validar que el cliente deba algo, si no debe, pues no se realiza
         if(deudaActual.compareTo(BigDecimal.ZERO) <= 0){
             throw new ExcepcionesTienda("No es posible pagar una deuda que está en cero");
         }
 
-        System.out.println("HASTA AQUI SE GUARDA EL SALDO ACTUAL " + deudaActual + ". Y SE VALIDÓ QUE EL CLIENTE DEBA ALGO");
-
         //Borrar todos los registro
         servicioMonto.borrarTodosLosMontos(cliente.id_cliente());
-
-        System.out.println("SE HAN BORRADO LOS MONTOS DE ESE CLIENTE");
 
         //crear nuevo registro tipo deuda
         MontoDTO montoDeudaDTO = new MontoDTO(cliente.id_cliente(), "Consolidación de deuda anterior", deudaActual, TipoMonto.DEUDA, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         gestionarOperacionMonto(montoDeudaDTO);
 
-        System.out.println("SE CREÓ EL MONTO DE DEUDA CON EL VALOR DE "+ montoDeudaDTO.valor());
-
         //crear nuevo registro tipo abono
         MontoDTO montoAbonoDTO = new MontoDTO(cliente.id_cliente(), "Se realizó el pago completo de la deuda", deudaActual.negate(), TipoMonto.ABONO, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString());
         gestionarOperacionMonto(montoAbonoDTO);
 
-        System.out.println("SE HAN CREADO LA DEUDA Y EL ABONOD EL MISMO VALOR ");
-        System.out.println("DEUDA LUEGO DEL BORRADO: " + crud.validarExistencia(cliente.id_cliente()).getSaldo_actual());
         //Retorna el DTO de confirmación si toodo salió bien
         return new ConfirmacionDTO(
                 cliente.id_cliente(),

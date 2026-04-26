@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import org.springframework.stereotype.Service;
 
 import com.acm.tiendaerick.dtoCompartido.MontoDTO;
@@ -30,15 +31,23 @@ public class ServicioMonto {
 
     //métodok que calcula el monto total -> solo lo usarán las hijas
     private BigDecimal calcularDeuda(List<MontoDTO> lista){
-        return lista.stream()
-                    .map(monto -> monto.valor())
-                    .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
+        BigDecimal deuda = lista.stream()
+                .map(monto -> monto.valor())
+                .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
+        if(deuda.compareTo(BigDecimal.ZERO) < 0){
+            throw new ExcepcionesTienda("La deuda no puede ser negativa");
+        }
+        return deuda;
     }
 
     public BigDecimal calcularDeuda(long id_cliente){
-        return this.detalleTodosLosMontos(id_cliente).stream()
+        BigDecimal deuda = this.detalleTodosLosMontos(id_cliente).stream()
                                                      .map(monto -> monto.valor())
                                                      .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
+        if(deuda.compareTo(BigDecimal.ZERO) < 0){
+            throw new ExcepcionesTienda("La deuda no puede ser negativa");
+        }
+        return deuda;
     }
 
 
@@ -82,7 +91,7 @@ public class ServicioMonto {
         this.repositorio.borrarTodosLosMontos(id_cliente);
     }
 
-    public MontoDeClienteDTO actualizarMontoDeCliente(Long id_monto, MontoDTO monto){
+    public MontoDeClienteDTO actualizarMontoDeCliente(long id_monto, MontoDTO monto){
         EntidadMonto entidad = repositorio.findById(id_monto)   //Si lo encuentra, le asigna de una vez sus valores
                                                     .orElseThrow(() -> new RuntimeException("Monto no encontrado"));
         
@@ -93,6 +102,8 @@ public class ServicioMonto {
 
         //Save detecta la entidad existente por el id y al "guardarla" realiza un UPDATE
         EntidadMonto entidad_actualizada = repositorio.save(entidad);
+
+        calcularDeuda(monto.id_cliente());
 
         return new MontoDeClienteDTO(entidad_actualizada.getId_monto(), 
                                      entidad_actualizada.getCliente().getId_cliente(), 

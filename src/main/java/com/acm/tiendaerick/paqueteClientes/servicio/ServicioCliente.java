@@ -30,7 +30,20 @@ public abstract class ServicioCliente {
     public abstract boolean aplicarPara(TipoCliente tipoCliente);
     protected abstract void validarReglasDeNegocio(MontoDTO monto);
     public abstract ConfirmacionDTO pagarDeuda(ClienteDTO cliente);
-    public abstract MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto);
+
+
+    public MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto) {
+        validarReglasDeNegocio(monto);
+
+        //registra el monto en su tabla (lo relaciona automáticamente al cliente)
+        MontoDeClienteDTO respuesta = servicioMonto.registrarMonto(monto.id_cliente(), monto);
+
+
+        //Le sumo el valor de la deuda al saldo actual del cliente y se lo guardo
+        crud.actualizarSaldoActual(monto.id_cliente(), servicioMonto.calcularDeuda(monto.id_cliente()));
+
+        return respuesta;
+    }
 
 
     //Metodo para obtener el tipo de iun cliente cuando el front no nos lo envía
@@ -60,7 +73,7 @@ public abstract class ServicioCliente {
         crud.validarExistencia(cliente.id_cliente());
 
         //compareTo(BigDecimal.ZERO) retorna un -1  si es negativo, 0 si es igual a 0 y 1 si es positivo, entonce al decirle que lace error al ser mayor que 0, solo se cumple si el ]BigDecimal es positovo (el cliente debe dinero)
-        if(crud.validarExistencia(cliente.id_cliente()).getSaldo_actual().compareTo(BigDecimal.ZERO) > 0){
+        if(servicioMonto.calcularDeuda(cliente.id_cliente()).compareTo(BigDecimal.ZERO) > 0){
             throw new ExcepcionesTienda("No se puede eliminar un cliente con un saldo pendiente a pagar");
         }
 
