@@ -59,7 +59,7 @@ public class ServicioCFrecuente extends ServicioCliente {
     public ConfirmacionDTO pagarDeuda(ClienteDTO cliente) {
 
         //guardo la deuda actual
-        BigDecimal deudaActual = servicioMonto.calcularDeuda(cliente.id_cliente());
+        BigDecimal deudaActual = crud.validarExistencia(cliente.id_cliente()).getSaldo_actual();
 
         //Validar que el cliente deba algo, si no debe, pues no se realiza
         if(deudaActual.compareTo(BigDecimal.ZERO) <= 0){

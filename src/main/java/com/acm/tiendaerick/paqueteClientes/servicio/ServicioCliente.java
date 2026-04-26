@@ -70,10 +70,8 @@ public abstract class ServicioCliente {
 
     public ConfirmacionDTO eliminarCliente(ClienteDTO cliente){
 
-        crud.validarExistencia(cliente.id_cliente());
-
         //compareTo(BigDecimal.ZERO) retorna un -1  si es negativo, 0 si es igual a 0 y 1 si es positivo, entonce al decirle que lace error al ser mayor que 0, solo se cumple si el ]BigDecimal es positovo (el cliente debe dinero)
-        if(servicioMonto.calcularDeuda(cliente.id_cliente()).compareTo(BigDecimal.ZERO) > 0){
+        if(crud.validarExistencia(cliente.id_cliente()).getSaldo_actual().compareTo(BigDecimal.ZERO) > 0){
             throw new ExcepcionesTienda("No se puede eliminar un cliente con un saldo pendiente a pagar");
         }
 
