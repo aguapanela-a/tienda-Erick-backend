@@ -59,6 +59,7 @@ public class ServicioCFrecuente extends ServicioCliente {
         EntidadCliente entidadFrecuente = new EntidadCliente();
         entidadFrecuente.setNombre(registroDTO.nombre());
         entidadFrecuente.setTipo_cliente(registroDTO.tipo_cliente());
+        entidadFrecuente.setSaldo_actual(BigDecimal.ZERO);
 
         return crud.registrarCliente(entidadFrecuente);
     }
