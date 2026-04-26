@@ -71,7 +71,7 @@ public class ControladorCliente {
     public ResponseEntity<ConfirmacionDTO> pagarDeuda(@Valid @RequestBody ClienteDTO clienteDTO){
         return ResponseEntity.ok(
                 orquestador
-                        .seleccionarServicio(clienteDTO.tipo_cliente())
+                        .seleccionarServicio(clienteDTO.id_cliente(), clienteDTO.tipo_cliente())
                         .pagarDeuda(clienteDTO)
         );
     }

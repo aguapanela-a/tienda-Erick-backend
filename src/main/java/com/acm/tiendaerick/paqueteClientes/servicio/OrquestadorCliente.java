@@ -18,15 +18,22 @@ public class OrquestadorCliente {
     }
 
 
-     public ServicioCliente seleccionarServicio(TipoCliente tipoCliente){
+     public ServicioCliente seleccionarServicio(long id_cliente, TipoCliente tipoCliente){
         return serviciosclientes.stream()
-                .filter(servicioCliente -> servicioCliente.aplicarPara(tipoCliente))
+                .filter(servicioCliente -> servicioCliente.aplicarPara(id_cliente, tipoCliente))
                 .findFirst()
                 .orElseThrow(() -> new ExcepcionesTienda("El tipo de cliente seleccionado no existe en el sistema :("));
      }
 
+     public ServicioCliente seleccionarServicio(TipoCliente tipoCliente){
+         return serviciosclientes.stream()
+                 .filter(servicioCliente -> servicioCliente.aplicarPara(tipoCliente))
+                 .findFirst()
+                 .orElseThrow(() -> new ExcepcionesTienda("El tipo de cliente seleccionado no existe en el sistema :("));
+     }
+
      public ServicioCliente obtenerServicioPorId(long id){
-        return seleccionarServicio(serviciosclientes.stream()
+        return seleccionarServicio(id, serviciosclientes.stream()
                 .map(servicioCliente -> servicioCliente.obtenerClientePorId(id))
                 .map(ClienteDTO::tipo_cliente).findFirst().get());
      }

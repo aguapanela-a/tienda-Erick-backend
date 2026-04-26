@@ -26,6 +26,16 @@ public class ServicioCInvitado extends ServicioCliente{
     }
 
     @Override
+    public boolean aplicarPara(long id_cliente, TipoCliente tipoCliente) {
+
+        if(crud.obtenerClientePorId(id_cliente).tipo_cliente() == tipoCliente) {
+            return tipoCliente == TipoCliente.INVITADO;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
     public boolean aplicarPara(TipoCliente tipoCliente) {
         return tipoCliente == TipoCliente.INVITADO;
     }

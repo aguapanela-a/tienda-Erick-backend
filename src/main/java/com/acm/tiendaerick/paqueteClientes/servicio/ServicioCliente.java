@@ -27,6 +27,7 @@ public abstract class ServicioCliente {
 
     //métodos que las hijas implementarán
     public abstract ClienteDTO registrarCliente(ClienteRegistroDTO registroDTO);
+    public abstract boolean aplicarPara(long id_cliente, TipoCliente tipoCliente);
     public abstract boolean aplicarPara(TipoCliente tipoCliente);
     protected abstract void validarReglasDeNegocio(MontoDTO monto);
     public abstract ConfirmacionDTO pagarDeuda(ClienteDTO cliente);
