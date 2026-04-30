@@ -59,6 +59,7 @@ public class ServicioCInvitado extends ServicioCliente{
         EntidadCInvitado clienteCInvitado = new EntidadCInvitado();
         clienteCInvitado.setNombre(registroDTO.nombre());
         clienteCInvitado.setTipo_cliente(registroDTO.tipo_cliente());
+        clienteCInvitado.setSaldo_actual(BigDecimal.ZERO);
         clienteCInvitado.setFecha_expiracion(LocalDateTime.now().plusHours(24));
 
         return crud.registrarCliente(clienteCInvitado);
