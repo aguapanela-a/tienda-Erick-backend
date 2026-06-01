@@ -6,7 +6,19 @@ import java.util.List;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.entidad.EntidadMonto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +35,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder //genera el patrón builder usando @AllArgsConstructor
 public class EntidadCliente {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //para que la BD genere los id automáticamente
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientes_seq")
+    @SequenceGenerator(
+        name = "clientes_seq",
+        sequenceName = "clientes_seq",
+        allocationSize = 1
+    ) //para que la BD genere los id automáticamente - 
     private long id_cliente;
 
     @Column(unique = true)
