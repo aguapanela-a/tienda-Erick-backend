@@ -17,6 +17,13 @@ public class OrquestadorCliente {
         this.serviciosclientes = serviciosclientes;
     }
 
+     public ServicioCliente seleccionarServicioActual(long idCliente){
+
+        return serviciosclientes.stream()
+                .filter(servicio -> servicio.aplicarPara(idCliente))
+                .findFirst()
+                .orElseThrow(() -> new ExcepcionesTienda("El cliente no tiene un tipo válido"));
+     }
 
      public ServicioCliente seleccionarServicio(long id_cliente, TipoCliente tipoCliente){
         return serviciosclientes.stream()

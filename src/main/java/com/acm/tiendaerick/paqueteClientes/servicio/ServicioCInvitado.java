@@ -25,6 +25,14 @@ public class ServicioCInvitado extends ServicioCliente{
         this.repositorioCInvitado = repositorioCInvitado;
     }
 
+
+    @Override
+    public boolean aplicarPara(long idCliente) {
+
+        return crud.obtenerClientePorId(idCliente)
+                .tipo_cliente() == TipoCliente.INVITADO;
+    }
+
     @Override
     public boolean aplicarPara(long id_cliente, TipoCliente tipoCliente) {
 
@@ -85,5 +93,30 @@ public class ServicioCInvitado extends ServicioCliente{
     @Scheduled(initialDelay = 60000, fixedRate = 7_200_000)
     public void autoborrado(){
         repositorioCInvitado.eliminarClienteVencido(LocalDateTime.now());
+    }
+
+    public void eliminarExpiracion(long idCliente){
+
+        EntidadCInvitado invitado = repositorioCInvitado
+                .findById(idCliente)
+                .orElseThrow(() ->
+                        new ExcepcionesTienda("Cliente invitado no encontrado"));
+
+        invitado.setFecha_expiracion(null);
+
+        repositorioCInvitado.save(invitado);
+    }
+
+
+    @Override
+    public ClienteDTO actualizarCliente(ClienteDTO cliente){
+        ClienteDTO response = crud.actualizarCliente(cliente);
+
+        //Si el cambio fue de invitado a frecuente, eliminamos el registro en el repository de invitado
+        if(response.tipo_cliente().equals(TipoCliente.FRECUENTE)){
+            eliminarExpiracion(response.id_cliente());
+        }
+
+        return response;
     }
 }

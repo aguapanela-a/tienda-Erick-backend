@@ -50,7 +50,7 @@ public class ControladorCliente {
     public ResponseEntity<ClienteDTO> actualizarCliente(@Valid @RequestBody ClienteDTO clienteDTO){
         return ResponseEntity.ok(
                 orquestador.
-                        seleccionarServicio(clienteDTO.tipo_cliente()).
+                        seleccionarServicioActual(clienteDTO.id_cliente()).
                         actualizarCliente(clienteDTO)
         );
     }

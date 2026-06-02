@@ -26,6 +26,13 @@ public class ServicioCFrecuente extends ServicioCliente {
     }
 
     @Override
+    public boolean aplicarPara(long idCliente) {
+
+        return crud.obtenerClientePorId(idCliente)
+                .tipo_cliente() == TipoCliente.FRECUENTE;
+    }
+
+    @Override
     public boolean aplicarPara(long id_cliente, TipoCliente tipoCliente) {
 
         if(crud.obtenerClientePorId(id_cliente).tipo_cliente() == tipoCliente) {

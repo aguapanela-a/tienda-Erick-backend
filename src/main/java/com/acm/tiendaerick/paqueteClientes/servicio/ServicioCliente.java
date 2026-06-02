@@ -28,6 +28,7 @@ public abstract class ServicioCliente {
     public abstract ClienteDTO registrarCliente(ClienteRegistroDTO registroDTO);
     public abstract boolean aplicarPara(long id_cliente, TipoCliente tipoCliente);
     public abstract boolean aplicarPara(TipoCliente tipoCliente);
+    public abstract boolean aplicarPara(long idCliente);
     protected abstract void validarReglasDeNegocio(MontoDTO monto);
     public abstract ConfirmacionDTO pagarDeuda(ClienteDTO cliente);
 
@@ -85,9 +86,6 @@ public abstract class ServicioCliente {
 
         return crud.eliminarCliente(cliente.id_cliente());
     }
-
-
-
 
 
 }

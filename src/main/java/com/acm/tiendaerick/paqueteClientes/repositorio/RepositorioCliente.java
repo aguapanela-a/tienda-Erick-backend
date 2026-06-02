@@ -24,4 +24,15 @@ public interface RepositorioCliente extends JpaRepository<EntidadCliente, Long> 
     List<EntidadCliente> buscarPorIniciales(@Param("nombre") String nombre, Sort sort, Limit limit);
 
 
+    @Query("""
+        SELECT COUNT(c) > 0
+        FROM EntidadCliente c
+        WHERE c.nombre = :nombre
+        AND c.id_cliente <> :idCliente
+    """)
+    boolean existsByNombreAndIdClienteNot(
+            @Param("nombre") String nombre,
+            @Param("idCliente") Long idCliente
+    );
+
 }

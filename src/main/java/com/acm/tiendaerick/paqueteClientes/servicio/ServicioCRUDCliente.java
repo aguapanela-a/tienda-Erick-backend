@@ -30,6 +30,14 @@ public class ServicioCRUDCliente {
         }
     }
 
+    public void existeOtroClienteConEseNombre(String nombre, Long idActual){
+        if(repositorioCliente.existsByNombreAndIdClienteNot(nombre, idActual)){
+            throw new ExcepcionesTienda(
+                    "Ya existe otro cliente con el nombre: " + nombre
+            );
+        }
+    }
+
 
     public @NonNull EntidadCliente validarExistencia(long id){
         return repositorioCliente.findById(id)  //busca el cliente existente por el id del dto que recibe del front
@@ -65,7 +73,7 @@ public class ServicioCRUDCliente {
         EntidadCliente clienteExistente = validarExistencia(dtoEntrada.id_cliente());
 
         //Evitar que cambie a un nombre ya existente
-        validarNombre(dtoEntrada.nombre());
+        existeOtroClienteConEseNombre(dtoEntrada.nombre(), dtoEntrada.id_cliente());
 
         //Evitar que un cliente frecuente se vuelva invitado
         if(clienteExistente.getTipo_cliente().equals(TipoCliente.FRECUENTE) && dtoEntrada.tipo_cliente().equals(TipoCliente.INVITADO)){
