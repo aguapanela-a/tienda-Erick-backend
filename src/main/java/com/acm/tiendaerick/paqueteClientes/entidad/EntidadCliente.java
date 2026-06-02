@@ -6,22 +6,41 @@ import java.util.List;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.entidad.EntidadMonto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+@Entity //le dice al JPA que esto es una entidad pa que la guarde
 @Table(name = "clientes") //nombre de la tabla
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter @Setter // generarlos automáticamente
 @NoArgsConstructor //constructor sin argumentos para que JPA lo use
 @AllArgsConstructor //constructor con argumentos para que nosotros lo usemos
 @SuperBuilder //genera el patrón builder usando @AllArgsConstructor
-@Entity //le dice al JPA que esto es una entidad pa que la guarde
 public class EntidadCliente {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //para que la BD genere los id automáticamente
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientes_seq")
+    @SequenceGenerator(
+        name = "clientes_seq",
+        sequenceName = "clientes_seq",
+        allocationSize = 1
+    ) //para que la BD genere los id automáticamente - 
     private long id_cliente;
 
     @Column(unique = true)
@@ -31,6 +50,8 @@ public class EntidadCliente {
     private TipoCliente tipo_cliente;
 
     private double deuda;
+
+    @PositiveOrZero
     private BigDecimal saldo_actual;
 
     //cascade = CascadeType.ALL es pa que las cosas que se le hagan al cliente también se le hagan a cada monto

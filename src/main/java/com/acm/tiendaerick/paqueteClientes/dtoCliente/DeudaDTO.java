@@ -4,11 +4,12 @@ import com.acm.tiendaerick.dtoCompartido.MontoDTO;
 import jakarta.validation.constraints.NegativeOrZero;
 import jakarta.validation.constraints.PositiveOrZero;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public record DeudaDTO(
         @PositiveOrZero(message = "El total no puede ser negativo")
-        long total,
+        BigDecimal total,
 
         List<MontoDTO> movimientos) {
 }

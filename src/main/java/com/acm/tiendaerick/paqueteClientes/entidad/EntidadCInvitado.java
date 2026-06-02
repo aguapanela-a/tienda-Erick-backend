@@ -1,6 +1,7 @@
 package com.acm.tiendaerick.paqueteClientes.entidad;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -17,5 +18,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder   //Builder para clases heredadas
 @Entity //Es una entidad
 public class EntidadCInvitado extends EntidadCliente{
-    private Date fecha_expiracion;
+    private LocalDateTime fecha_expiracion;
 }

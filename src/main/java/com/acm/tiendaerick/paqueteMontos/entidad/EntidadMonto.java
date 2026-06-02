@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +30,13 @@ import lombok.Setter;
 @Entity
 public class EntidadMonto {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_monto;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "montos_seq")
+    @SequenceGenerator(
+        name = "montos_seq",
+        sequenceName = "montos_seq",
+        allocationSize = 1
+    )
+    private long id_monto;
 
     private String descripcion;
     private BigDecimal valor;

@@ -2,15 +2,18 @@ package com.acm.tiendaerick.paqueteClientes.servicio;
 
 import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
-import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ConfirmacionDTO;
-import com.acm.tiendaerick.paqueteClientes.dtoCliente.TipoClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCliente;
 import com.acm.tiendaerick.paqueteClientes.repositorio.RepositorioCliente;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class ServicioCRUDCliente {
@@ -27,24 +30,38 @@ public class ServicioCRUDCliente {
         }
     }
 
-    private @NonNull EntidadCliente validarExistencia(long id){
+    public void existeOtroClienteConEseNombre(String nombre, Long idActual){
+        if(repositorioCliente.existsByNombreAndIdClienteNot(nombre, idActual)){
+            throw new ExcepcionesTienda(
+                    "Ya existe otro cliente con el nombre: " + nombre
+            );
+        }
+    }
+
+
+    public @NonNull EntidadCliente validarExistencia(long id){
         return repositorioCliente.findById(id)  //busca el cliente existente por el id del dto que recibe del front
                 .orElseThrow(()->new ExcepcionesTienda("El cliente no existe en el sistema")); //Si no existe esa entidad con ese ID lanza ese error
     }
 
 
-    public ClienteDTO registrarCliente(@NonNull ClienteRegistroDTO registroDTO) {
+    public List<ClienteDTO> buscarPorPrefijo(String prefijo){
+
+        //buscarPorIniciales me devuelve una lista de EntidadesCliente por cada prefijo y luego les hago Stream,
+        // las mapeo a ClienteDTO cada una y las meto a una List
+        return repositorioCliente.buscarPorIniciales(prefijo, Sort.by("nombre"), Limit.of(5)).stream()
+                .map(entidadC -> new ClienteDTO(entidadC.getId_cliente(), entidadC.getNombre(), entidadC.getTipo_cliente()))
+                .toList();
+    }
+
+
+    public ClienteDTO registrarCliente(@NonNull EntidadCliente entidadC) {
 
         //Si ya existe ese nombre que lance una ExcepcionesTienda (que en el controlador de excepciones se maneja)
-        validarNombre(registroDTO.nombre());
-
-        //Si lo de arriba no se cumple (no existe ese nombre) crea una nueva entidad a partir del DTO
-        EntidadCliente cliente = new EntidadCliente();
-        cliente.setNombre(registroDTO.nombre());
-        cliente.setTipo_cliente(registroDTO.tipo_cliente());
+        validarNombre(entidadC.getNombre());
 
         //Guarda la entidad (aquí la BD asigna la id)
-        EntidadCliente entidad = repositorioCliente.save(cliente);
+        EntidadCliente entidad = repositorioCliente.save(entidadC);
 
         //Crea el DTO de retorno con la entidad ya guardada <3
         return new ClienteDTO(entidad.getId_cliente(), entidad.getNombre(),entidad.getTipo_cliente());
@@ -56,7 +73,7 @@ public class ServicioCRUDCliente {
         EntidadCliente clienteExistente = validarExistencia(dtoEntrada.id_cliente());
 
         //Evitar que cambie a un nombre ya existente
-        validarNombre(dtoEntrada.nombre());
+        existeOtroClienteConEseNombre(dtoEntrada.nombre(), dtoEntrada.id_cliente());
 
         //Evitar que un cliente frecuente se vuelva invitado
         if(clienteExistente.getTipo_cliente().equals(TipoCliente.FRECUENTE) && dtoEntrada.tipo_cliente().equals(TipoCliente.INVITADO)){
@@ -74,10 +91,10 @@ public class ServicioCRUDCliente {
     }
 
 
-    public ConfirmacionDTO eliminarCliente(@NonNull ClienteDTO dtoEntrada) {
+    public ConfirmacionDTO eliminarCliente(@NonNull long id) {
 
-        //Verifica que exista
-        EntidadCliente clienteAEliminar = validarExistencia(dtoEntrada.id_cliente());
+        //Verifica que exista (toca hacerlo en el ServicioCliente xd)
+        EntidadCliente clienteAEliminar = validarExistencia(id);
 
         //si existe crea DTO respuesta
         ConfirmacionDTO confirmacion = new ConfirmacionDTO(clienteAEliminar.getId_cliente(), clienteAEliminar.getSaldo_actual(), "Cliente " + clienteAEliminar.getNombre() + " eliminado correctamente", clienteAEliminar.getNombre());
@@ -88,9 +105,21 @@ public class ServicioCRUDCliente {
         return confirmacion;
     }
 
-    public TipoClienteDTO obtenerTipoClientePorId(long id){
+    public ClienteDTO obtenerClientePorId(long id){
         EntidadCliente cliente = validarExistencia(id);
-        return new TipoClienteDTO(cliente.getId_cliente(), cliente.getTipo_cliente());
+        return new ClienteDTO(cliente.getId_cliente(), cliente.getNombre(), cliente.getTipo_cliente());
     }
 
+    public void actualizarSaldoActual(long id_cliente, BigDecimal saldoActualizado) {
+
+        //agarra la entidad Cliente
+        EntidadCliente clienteExistente = validarExistencia(id_cliente);
+
+        //le meto el saldo actualizado
+        clienteExistente.setSaldo_actual(saldoActualizado);
+
+        //vuelvo y guardo
+        repositorioCliente.save(clienteExistente);
+
+    }
 }
