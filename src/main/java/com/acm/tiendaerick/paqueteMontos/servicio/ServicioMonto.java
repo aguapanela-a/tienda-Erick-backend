@@ -31,7 +31,18 @@ public class ServicioMonto {
 
 
     //métodok que calcula el monto total -> solo lo usarán las hijas
-    private BigDecimal calcularDeuda(List<MontoDTO> lista){
+    // private BigDecimal calcularDeuda(List<MontoDTO> lista){
+    //     BigDecimal deuda = lista.stream()
+    //             .map(monto -> monto.valor())
+    //             .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
+    //     if(deuda.compareTo(BigDecimal.ZERO) < 0){
+    //         throw new ExcepcionesTienda("La deuda no puede ser negativa");
+    //     }
+    //     return deuda;
+    // }
+
+    //métodok que calcula el monto total -> solo lo usarán las hijas
+    private BigDecimal calcularDeudaMontoDeCliente(List<MontoDeClienteDTO> lista){
         BigDecimal deuda = lista.stream()
                 .map(monto -> monto.valor())
                 .reduce(BigDecimal.ZERO, BigDecimal::add); //Como es BigDecimal no se puede mapear directamente y sumar, por lo tanto se hace un .reduce para que empiece desde 0 y para acumulando cada valor
@@ -53,9 +64,9 @@ public class ServicioMonto {
 
 
     public DeudaDTO obtenerDeuda(long id_cliente){
-        List<MontoDTO> lista = this.detalleTodosLosMontos(id_cliente);
+        List<MontoDeClienteDTO> lista = this.detalleMontoDeCliente(id_cliente);
 
-        return new DeudaDTO(calcularDeuda(lista), lista);
+        return new DeudaDTO(calcularDeudaMontoDeCliente(lista), lista);
     }
 
     public MontoDeClienteDTO registrarMonto(long id_cliente, MontoDTO monto){
@@ -85,6 +96,24 @@ public class ServicioMonto {
                                 convLocalDateString(entidad.getFecha())
                         ))
                         .collect(Collectors.toList());
+    }
+
+    public List<MontoDeClienteDTO> detalleMontoDeCliente(long idCliente) {
+
+        //Obtener todos los montos del cliente
+        List<EntidadMonto> entidades = repositorio.buscarPorCliente(idCliente);
+
+        return entidades.stream()
+                        .map(entidad -> new MontoDeClienteDTO(
+                                entidad.getId_monto(),
+                                entidad.getCliente().getId_cliente(),
+                                entidad.getDescripcion(),
+                                entidad.getValor(),
+                                entidad.getTipo(),
+                                convLocalDateString(entidad.getFecha())
+                        ))
+                        .collect(Collectors.toList());
+
     }
 
     //Método para borrar todos los montos

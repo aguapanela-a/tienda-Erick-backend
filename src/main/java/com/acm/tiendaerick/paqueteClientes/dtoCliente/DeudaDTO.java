@@ -1,15 +1,15 @@
 package com.acm.tiendaerick.paqueteClientes.dtoCliente;
 
-import com.acm.tiendaerick.dtoCompartido.MontoDTO;
-import jakarta.validation.constraints.NegativeOrZero;
-import jakarta.validation.constraints.PositiveOrZero;
-
 import java.math.BigDecimal;
 import java.util.List;
+
+import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
+
+import jakarta.validation.constraints.PositiveOrZero;
 
 public record DeudaDTO(
         @PositiveOrZero(message = "El total no puede ser negativo")
         BigDecimal total,
 
-        List<MontoDTO> movimientos) {
+        List<MontoDeClienteDTO> movimientos) {
 }
