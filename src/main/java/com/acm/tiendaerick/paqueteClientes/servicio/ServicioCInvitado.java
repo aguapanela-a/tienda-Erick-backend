@@ -1,7 +1,12 @@
 package com.acm.tiendaerick.paqueteClientes.servicio;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
 import com.acm.tiendaerick.dtoCompartido.MontoDTO;
-import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
 import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;
@@ -10,11 +15,6 @@ import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCInvitado;
 import com.acm.tiendaerick.paqueteClientes.repositorio.RepositorioCInvitado;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.servicio.ServicioMonto;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Service
 public class ServicioCInvitado extends ServicioCliente{
