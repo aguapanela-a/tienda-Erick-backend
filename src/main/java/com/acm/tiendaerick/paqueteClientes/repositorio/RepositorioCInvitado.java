@@ -17,7 +17,7 @@ public interface RepositorioCInvitado extends JpaRepository<EntidadCInvitado, Lo
     @Modifying  //Para avisarle a Spring que este metodo es para modificar
     @Transactional //Para que deje borrar/escribir
     //@Query(value = "DELETE FROM expiracion_invitado WHERE fecha_expiracion < ?1", nativeQuery=true)
-    @Query("DELETE FROM EntidadCInvitado e WHERE e.fecha_expiracion IS NOT NULL AND e.fecha_expiracion <= :fecha_actual")
+    @Query("DELETE FROM EntidadCInvitado e WHERE e.fecha_expiracion IS NOT NULL AND e.fecha_expiracion <= :fecha_actual AND e.movimientos IS EMPTY")
     public void eliminarClienteVencido(@Param("fecha_actual") LocalDateTime fecha_actual);
 
     @Modifying  //Para avisarle a Spring que este metodo es para modificar
