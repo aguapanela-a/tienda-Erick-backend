@@ -1,19 +1,26 @@
 package com.acm.tiendaerick.paqueteClientes.controlador;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.acm.tiendaerick.dtoCompartido.MontoDTO;
 import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ConfirmacionDTO;
 import com.acm.tiendaerick.paqueteClientes.servicio.OrquestadorCliente;
-import com.acm.tiendaerick.paqueteClientes.servicio.ServicioCliente;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/clientes")
@@ -39,7 +46,7 @@ public class ControladorCliente {
     }
 
 
-    @PutMapping("/atualisar")
+    @PutMapping("/actualizar")
     public ResponseEntity<ClienteDTO> actualizarCliente(@Valid @RequestBody ClienteDTO clienteDTO){
         return ResponseEntity.ok(
                 orquestador.
@@ -67,7 +74,7 @@ public class ControladorCliente {
     }
 
 
-    @PutMapping("pagarTodo")
+    @PutMapping("/pagarTodo")
     public ResponseEntity<ConfirmacionDTO> pagarDeuda(@Valid @RequestBody ClienteDTO clienteDTO){
         return ResponseEntity.ok(
                 orquestador

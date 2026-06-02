@@ -1,7 +1,12 @@
 package com.acm.tiendaerick.paqueteClientes.servicio;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import org.springframework.stereotype.Service;
+
 import com.acm.tiendaerick.dtoCompartido.MontoDTO;
-import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
 import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;
@@ -10,12 +15,8 @@ import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCliente;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.servicio.ServicioMonto;
 import com.acm.tiendaerick.paqueteMontos.tipoEnum.TipoMonto;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ServicioCFrecuente extends ServicioCliente {
@@ -40,14 +41,18 @@ public class ServicioCFrecuente extends ServicioCliente {
     }
 
 
-    //Unicamente validar que el monto sea diferente a cero, no importa el tipo porque para freceuntes se vale to
+    //Unicamente validar que el monto sea diferente a cero, validar que el tipo sea congruente con el valor
     @Override
     protected void validarReglasDeNegocio(MontoDTO monto) {
         if(monto.valor().compareTo(BigDecimal.ZERO) == 0){
             throw new ExcepcionesTienda("El monto a ingresar debe ser diferente que cero");
         }
-        if((crud.validarExistencia(monto.id_cliente()).getSaldo_actual().compareTo(BigDecimal.ZERO) + monto.valor().compareTo(BigDecimal.ZERO) < 0 )){
-            throw  new ExcepcionesTienda("El saldo total del cliente no puede ser negativo");
+
+        if (crud.validarExistencia(monto.id_cliente())
+                                        .getSaldo_actual()
+                                        .add(monto.valor())
+                                        .compareTo(BigDecimal.ZERO) < 0) {
+            throw new ExcepcionesTienda("El saldo total del cliente no puede ser negativo");
         }
     }
 

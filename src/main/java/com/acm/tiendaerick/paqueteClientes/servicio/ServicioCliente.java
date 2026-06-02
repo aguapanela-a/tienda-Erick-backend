@@ -1,18 +1,17 @@
 package com.acm.tiendaerick.paqueteClientes.servicio;
 
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+
 import com.acm.tiendaerick.dtoCompartido.MontoDTO;
 import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
 import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ConfirmacionDTO;
-import com.acm.tiendaerick.paqueteClientes.dtoCliente.DeudaDTO;
 import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.servicio.ServicioMonto;
-
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
 
 public abstract class ServicioCliente {
 
@@ -36,12 +35,20 @@ public abstract class ServicioCliente {
     public MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto) {
         validarReglasDeNegocio(monto);
 
+        //Trae el saldo actual
+        BigDecimal deuda_inicial = servicioMonto.calcularDeuda(monto.id_cliente());
+        BigDecimal deuda_final = servicioMonto.normalizarValor(monto).add(deuda_inicial);
+
+        //Al monto se le suma 
+        if(deuda_final.compareTo(BigDecimal.ZERO) < 0){
+            throw new ExcepcionesTienda("La deuda no puede ser negativa");
+        }
+
         //registra el monto en su tabla (lo relaciona automáticamente al cliente)
         MontoDeClienteDTO respuesta = servicioMonto.registrarMonto(monto.id_cliente(), monto);
 
-
         //Le sumo el valor de la deuda al saldo actual del cliente y se lo guardo
-        crud.actualizarSaldoActual(monto.id_cliente(), servicioMonto.calcularDeuda(monto.id_cliente()));
+        crud.actualizarSaldoActual(monto.id_cliente(), deuda_final);
 
         return respuesta;
     }

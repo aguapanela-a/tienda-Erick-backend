@@ -6,15 +6,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import org.springframework.stereotype.Service;
 
 import com.acm.tiendaerick.dtoCompartido.MontoDTO;
 import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
+import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.DeudaDTO;
 import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCliente;
 import com.acm.tiendaerick.paqueteMontos.entidad.EntidadMonto;
 import com.acm.tiendaerick.paqueteMontos.repositorio.RepositorioMonto;
+import com.acm.tiendaerick.paqueteMontos.tipoEnum.TipoMonto;
 
 
 
@@ -123,7 +124,7 @@ public class ServicioMonto {
         entidad.setCliente(cliente);                            //Agregar el id_cliente                      
         entidad.setDescripcion(monto.descripcion());            //Agregar descripcion
         entidad.setFecha(convStringLocalDate(monto.fecha()));   //Agregar fecha
-        entidad.setValor(monto.valor());                        //Agregar valor
+        entidad.setValor(normalizarValor(monto));                        //Agregar valor
         entidad.setTipo(monto.tipo_monto());                    //Agregar tipo
         
         return entidad;
@@ -137,6 +138,14 @@ public class ServicioMonto {
     private String convLocalDateString(LocalDate fecha){
         String fechaFormateada = fecha.format(formatter);
         return fechaFormateada;
+    }
+
+    //Si el monto es abono, convierte el valor a negativo, si es deuda debe ser positivo
+    public BigDecimal normalizarValor(MontoDTO monto) {
+        if (monto.tipo_monto() == TipoMonto.ABONO) {
+            return monto.valor().abs().negate();
+        }
+        return monto.valor().abs();
     }
 
 }
