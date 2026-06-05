@@ -16,17 +16,12 @@ import java.util.List;
 public class Config {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // 1. Habilita CORS usando la configuración que definiste abajo
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                // 2. Desactiva CSRF porque Postman/Frontend pueden dar problemas sin token
-                .csrf(AbstractHttpConfigurer::disable)
-                // 3. Permite todas las peticiones sin pedir usuario/contraseña
+                .csrf(csrf -> csrf.disable()) // Desactiva la protección CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                        .anyRequest().permitAll() // ESTA ES LA CLAVE: Permite TODO sin login
                 );
-
         return http.build();
     }
 
