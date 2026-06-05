@@ -16,22 +16,25 @@ import java.util.List;
 public class Config {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Desactiva la protección CSRF
+                .csrf(csrf -> csrf.disable()) // Quita la protección de formularios
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // ESTA ES LA CLAVE: Permite TODO sin login
-                );
+                        .anyRequest().permitAll() // Quita la protección de usuario/pass
+                )
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())); // Aplica el CORS permisivo
+
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration cors = new CorsConfiguration();
-        String frontend = System.getenv("FRONTEND_URL");
-        cors.setAllowedOrigins(List.of(frontend != null ? frontend : "http://localhost:5173"));
+        // Con el asterisco, ya no dependes de la variable de entorno para probar
+        cors.setAllowedOriginPatterns(List.of("*"));
         cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         cors.setAllowedHeaders(List.of("*"));
+        cors.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", cors);
