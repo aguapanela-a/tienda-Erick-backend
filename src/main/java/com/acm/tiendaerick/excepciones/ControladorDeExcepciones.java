@@ -38,7 +38,7 @@ public class ControladorDeExcepciones {
      //Para manejar errores inesperados
      @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDTO> manejarCualquierError(Exception ex) {
-         ErrorDTO error = new ErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Ocurrió un error interno en el servidor. Inténtalo más tarde.");
+         ErrorDTO error = new ErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Ocurrió un error interno en el servidor. Inténtalo más tarde." + ex.getMessage());
 
          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
      }

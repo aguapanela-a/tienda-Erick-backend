@@ -7,8 +7,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+
+        String frontendUrl = System.getenv("FRONTEND_URL");
+
         registry.addMapping("/**") // Aplica a todos los endpoints
-                .allowedOrigins("*") // Permite cualquier front (Vue, React, etc.)
+                .allowedOriginPatterns(frontendUrl != null ? frontendUrl : "http://localhost:5173") // Permite el front dela tienda
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }

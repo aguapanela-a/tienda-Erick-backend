@@ -25,6 +25,8 @@ public class ServicioCFrecuente extends ServicioCliente {
         super(crud, servicioMonto);
     }
 
+
+    //TODO: HACER QUE ESTO RETORNE EL TIPO DE CLIENTE EN CUESTION
     @Override
     public boolean aplicarPara(long idCliente) {
 
@@ -32,6 +34,7 @@ public class ServicioCFrecuente extends ServicioCliente {
                 .tipo_cliente() == TipoCliente.FRECUENTE;
     }
 
+    //TODO: BORRAR ESTO
     @Override
     public boolean aplicarPara(long id_cliente, TipoCliente tipoCliente) {
 
@@ -41,6 +44,11 @@ public class ServicioCFrecuente extends ServicioCliente {
             return false;
         }
     }
+    // OBJETIVO -> HACER QUE ORQUESTADOR TENGA UN MAP <TipoCLiente (hacer metodo retorne frecuente o invitado en cada servicio), Servicio>
+    // EJECUTE LOS MÉTODOS DE LA CLASE ABSTRACTA SERVICIOCLIENTE SEGÚN EL ID DEL CLIENTE
+    // CON ESE ID DE CLIENTE BUSCARÁ CON EL METODO DE ARRIBA ELLTIPO DE ESE CLIENTE
+    // CON EL TIPO DE ESE CLIENTE HARÁ UN servicios.get(tipo_cliente).metodo PARA ASI EJECUTAR EL METODO
+    // DEL SERVICIO QUE ESE .GET RETORNE
 
     @Override
     public boolean aplicarPara(TipoCliente tipoCliente) {

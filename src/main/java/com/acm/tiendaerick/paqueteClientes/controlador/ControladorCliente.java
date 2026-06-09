@@ -58,7 +58,11 @@ public class ControladorCliente {
     }
 
     @GetMapping
-    public ResponseEntity<List<ClienteDTO>> busquedaClientes(@RequestParam (name = "search", required = false, defaultValue = "") String nombre){
+    public ResponseEntity<List<ClienteDTO>> busquedaClientes(
+            @RequestParam (
+                    name = "search", required = false, defaultValue = ""
+            ) String nombre
+    ){
 
         return ResponseEntity.ok(
                 orquestador.seleccionarServicio(TipoCliente.FRECUENTE)

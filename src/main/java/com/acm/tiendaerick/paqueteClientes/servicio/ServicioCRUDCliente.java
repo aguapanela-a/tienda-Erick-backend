@@ -45,15 +45,16 @@ public class ServicioCRUDCliente {
     }
 
 
-    public List<ClienteDTO> buscarPorPrefijo(String prefijo){
+    public List<ClienteDTO> buscarPorPrefijo(String prefijo) {
 
         //buscarPorIniciales me devuelve una lista de EntidadesCliente por cada prefijo y luego les hago Stream,
         // las mapeo a ClienteDTO cada una y las meto a una List
-        return repositorioCliente.buscarPorIniciales(prefijo, Sort.by("nombre"), Limit.of(5)).stream()
-                .map(entidadC -> new ClienteDTO(entidadC.getId_cliente(), entidadC.getNombre(), entidadC.getTipo_cliente()))
-                .toList();
-    }
+        return repositorioCliente.findAllByNombreContainingIgnoreCaseOrderByNombreAsc(prefijo, Limit.of(7))
+                .stream().map(
+                        cliente -> new ClienteDTO(cliente.getId_cliente(), cliente.getNombre(), cliente.getTipo_cliente())
+                ).toList();
 
+    }
 
     public ClienteDTO registrarCliente(@NonNull EntidadCliente entidadC) {
 
