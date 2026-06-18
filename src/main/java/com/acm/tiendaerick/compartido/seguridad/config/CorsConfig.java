@@ -46,6 +46,23 @@ public class CorsConfig implements WebMvcConfigurer {
                         //NOTE: dado que esta API no usa roles ni permisos específicos, no es necesario configurar reglas más detalladas. Si en el futuro se agregan roles o permisos, aquí es donde se definirían las reglas de acceso para cada endpoint.
                 )
                 .addFilterBefore(filtroJwt, UsernamePasswordAuthenticationFilter.class) // Agrega el filtro JWT antes del filtro de autenticación de Spring
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(
+                                (req, res, e) ->
+                                {
+                                    res.setStatus(401);
+                                    res.setContentType("application/json");
+                                    res.getWriter().write("{\"estado\":401,\"mensaje\":\"Token inválido o vencido\"}");
+                                }
+                        ).accessDeniedHandler(
+                                (req, res, e) ->
+                                {
+                                    res.setStatus(403);
+                                    res.setContentType("application/json");
+                                    res.getWriter().write("{\"estado\":403,\"mensaje\":\"No tienes permisos para acceder a este contenido\"}");
+                                }
+                        )
+                )
                 .build();
     }
 
