@@ -3,6 +3,9 @@ package com.acm.tiendaerick.excepciones;
 import com.acm.tiendaerick.compartido.dtoCompartido.ErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,6 +37,21 @@ public class ControladorDeExcepciones {
 
          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorValidacion);
      }
+
+     // Para 401: Token malo, vencido o no enviado
+    @ExceptionHandler({ AuthenticationException.class, BadCredentialsException.class })
+    public ResponseEntity<ErrorDTO> manejarErroresDeAutenticacion(AuthenticationException ex){
+         ErrorDTO errorAutenticacion = new ErrorDTO(HttpStatus.UNAUTHORIZED.value(),"No autenticado. Inicia sesión nuevamente - " + ex.getMessage());
+         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorAutenticacion);
+    }
+
+
+    // Para 403: No tiene permisos para acceder a este contenido
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorDTO> manejarErroresDeAutorizacion(AccessDeniedException ex){
+         ErrorDTO errorAutorizacion = new ErrorDTO(HttpStatus.FORBIDDEN.value(),"No tiene permisos para acceder a este contenido - " + ex.getMessage());
+         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorAutorizacion);
+    }
 
      //Para manejar errores inesperados
      @ExceptionHandler(Exception.class)
