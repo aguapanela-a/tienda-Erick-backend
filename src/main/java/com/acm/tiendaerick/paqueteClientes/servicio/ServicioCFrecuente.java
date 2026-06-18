@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Service;
 
-import com.acm.tiendaerick.dtoCompartido.MontoDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.MontoDTO;
 import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;

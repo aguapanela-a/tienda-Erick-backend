@@ -3,8 +3,8 @@ package com.acm.tiendaerick.paqueteMontos.controlador;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.acm.tiendaerick.dtoCompartido.MontoDTO;
-import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.MontoDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.MontoDeClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.DeudaDTO;
 import com.acm.tiendaerick.paqueteMontos.servicio.ServicioMonto;
 

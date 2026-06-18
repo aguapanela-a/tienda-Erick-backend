@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-import com.acm.tiendaerick.dtoCompartido.MontoDTO;
-import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.MontoDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.MontoDeClienteDTO;
 import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;

@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.acm.tiendaerick.dtoCompartido.MontoDTO;
-import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.MontoDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.MontoDeClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ClienteRegistroDTO;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.ConfirmacionDTO;

@@ -1,4 +1,4 @@
-package com.acm.tiendaerick.dtoCompartido;
+package com.acm.tiendaerick.compartido.dtoCompartido;
 
 import com.acm.tiendaerick.paqueteMontos.tipoEnum.TipoMonto;
 import jakarta.validation.constraints.NotBlank;

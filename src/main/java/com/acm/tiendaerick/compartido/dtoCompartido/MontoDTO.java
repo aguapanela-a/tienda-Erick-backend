@@ -1,4 +1,4 @@
-package com.acm.tiendaerick.dtoCompartido;
+package com.acm.tiendaerick.compartido.dtoCompartido;
 
 import java.math.BigDecimal;
 

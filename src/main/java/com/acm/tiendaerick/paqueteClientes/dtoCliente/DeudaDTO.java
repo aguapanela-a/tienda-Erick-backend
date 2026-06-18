@@ -3,7 +3,7 @@ package com.acm.tiendaerick.paqueteClientes.dtoCliente;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.MontoDeClienteDTO;
 
 import jakarta.validation.constraints.PositiveOrZero;
 

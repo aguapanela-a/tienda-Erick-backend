@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.acm.tiendaerick.dtoCompartido.MontoDTO;
-import com.acm.tiendaerick.dtoCompartido.MontoDeClienteDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.MontoDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.MontoDeClienteDTO;
 import com.acm.tiendaerick.excepciones.ExcepcionesTienda;
 import com.acm.tiendaerick.paqueteClientes.dtoCliente.DeudaDTO;
 import com.acm.tiendaerick.paqueteClientes.entidad.EntidadCliente;

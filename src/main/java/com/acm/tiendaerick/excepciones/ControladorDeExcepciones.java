@@ -1,6 +1,6 @@
 package com.acm.tiendaerick.excepciones;
 
-import com.acm.tiendaerick.dtoCompartido.ErrorDTO;
+import com.acm.tiendaerick.compartido.dtoCompartido.ErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
