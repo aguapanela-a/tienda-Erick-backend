@@ -1,4 +1,38 @@
+# Maven
 target/
-.git/
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE (IntelliJ)
 .idea/
+*.iml
+out/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Variables de entorno y secretos
+.env
+.env.*
+*.pem
+*.key
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Documentación
+HELP.md
+*.md
 .fastRequest
