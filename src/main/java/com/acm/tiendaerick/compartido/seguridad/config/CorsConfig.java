@@ -3,6 +3,7 @@ import com.acm.tiendaerick.compartido.seguridad.filtro.FiltroJwt;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,7 +37,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
         return http
                 .cors(cors->cors.configurationSource(corsConfigurationSource)) // Configura CORS con el bean CorsConfigurationSource
-                .csrf(csrf -> csrf.disable()) // Deshabilita CSRF (no es necesario para APIs REST)
+                .csrf(AbstractHttpConfigurer::disable) // Deshabilita CSRF (no es necesario para API REST)
 
                 //inicializamos con los filtros de seguridad de spring para cada endpoint
                 .authorizeHttpRequests(auth -> auth
