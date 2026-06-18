@@ -40,7 +40,7 @@ public class CorsConfig implements WebMvcConfigurer {
 
                 //inicializamos con los filtros de seguridad de spring para cada endpoint
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Permite acceso sin autenticación a los endpoints de autenticación
+                        .requestMatchers("/auth/**").permitAll() // Permite acceso sin autenticación a los endpoints de autenticación
                         .anyRequest().authenticated() // Requiere autenticación para cualquier otro endpoint
 
                         //NOTE: dado que esta API no usa roles ni permisos específicos, no es necesario configurar reglas más detalladas. Si en el futuro se agregan roles o permisos, aquí es donde se definirían las reglas de acceso para cada endpoint.

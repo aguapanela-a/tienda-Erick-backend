@@ -31,7 +31,7 @@ public class JwtServicio {
         //Segundo crear un JWTClaimsSet que es un objeto que contiene los datos del JWT (Claims)
         // en este caso los datos son el username, id, nombre y numero de telefono del usuario, y la fecha de expiracion del token
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(usuario.getUsername())
+                .subject(usuario.getNombre())
                 .claim("id", usuario.getId().toString())
                 .claim("nombre", usuario.getNombre())
                 .claim("numeroTelefono", usuario.getNumeroTelefono())
