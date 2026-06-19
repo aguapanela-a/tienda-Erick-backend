@@ -116,7 +116,7 @@ public class ServicioMonto {
 
     }
 
-    //Método para borrar todos los montos
+    //Metodo para borrar todos los montos
     public void borrarTodosLosMontos(long id_cliente){
         this.repositorio.borrarTodosLosMontos(id_cliente);
     }

@@ -25,13 +25,14 @@ public abstract class ServicioCliente {
 
 
     //métodos que las hijas implementarán
+    public abstract TipoCliente obtenerServicio();
     public abstract ClienteDTO registrarCliente(ClienteRegistroDTO registroDTO);
-    public abstract boolean aplicarPara(long id_cliente, TipoCliente tipoCliente);
-    public abstract boolean aplicarPara(TipoCliente tipoCliente);
-    public abstract boolean aplicarPara(long idCliente);
     protected abstract void validarReglasDeNegocio(MontoDTO monto);
     public abstract ConfirmacionDTO pagarDeuda(ClienteDTO cliente);
 
+    public TipoCliente obtenerTipoCliente(long idCliente){
+        return crud.validarExistencia(idCliente).getTipo_cliente();
+    }
 
     public MontoDeClienteDTO gestionarOperacionMonto(MontoDTO monto) {
         validarReglasDeNegocio(monto);

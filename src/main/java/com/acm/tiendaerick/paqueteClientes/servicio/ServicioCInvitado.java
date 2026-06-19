@@ -26,29 +26,6 @@ public class ServicioCInvitado extends ServicioCliente{
     }
 
 
-    @Override
-    public boolean aplicarPara(long idCliente) {
-
-        return crud.obtenerClientePorId(idCliente)
-                .tipo_cliente() == TipoCliente.INVITADO;
-    }
-
-    @Override
-    public boolean aplicarPara(long id_cliente, TipoCliente tipoCliente) {
-
-        if(crud.obtenerClientePorId(id_cliente).tipo_cliente() == tipoCliente) {
-            return tipoCliente == TipoCliente.INVITADO;
-        }else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean aplicarPara(TipoCliente tipoCliente) {
-        return tipoCliente == TipoCliente.INVITADO;
-    }
-
-
     //Validar que sea mayor que cero y que no sea abono
     @Override
     protected void validarReglasDeNegocio(MontoDTO monto) {
@@ -62,6 +39,11 @@ public class ServicioCInvitado extends ServicioCliente{
 
 
     @Override
+    public TipoCliente obtenerServicio() {
+        return TipoCliente.INVITADO;
+    }
+
+    @Override
     public ClienteDTO registrarCliente(ClienteRegistroDTO registroDTO) {
 
         EntidadCInvitado clienteCInvitado = new EntidadCInvitado();
@@ -72,6 +54,8 @@ public class ServicioCInvitado extends ServicioCliente{
 
         return crud.registrarCliente(clienteCInvitado);
     }
+
+
 
 
     @Override

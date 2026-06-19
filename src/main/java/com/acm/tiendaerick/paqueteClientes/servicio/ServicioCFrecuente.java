@@ -26,34 +26,19 @@ public class ServicioCFrecuente extends ServicioCliente {
     }
 
 
-    //TODO: HACER QUE ESTO RETORNE EL TIPO DE CLIENTE EN CUESTION
-    @Override
-    public boolean aplicarPara(long idCliente) {
+    //TODO: HACER QUE ESTO RETORNE EL TIPO DE CLIENTE EN CUESTION (hecho)
 
-        return crud.obtenerClientePorId(idCliente)
-                .tipo_cliente() == TipoCliente.FRECUENTE;
+
+    @Override
+    public TipoCliente obtenerServicio(){
+        return TipoCliente.FRECUENTE;
     }
 
-    //TODO: BORRAR ESTO
-    @Override
-    public boolean aplicarPara(long id_cliente, TipoCliente tipoCliente) {
-
-        if(crud.obtenerClientePorId(id_cliente).tipo_cliente() == tipoCliente) {
-            return tipoCliente == TipoCliente.FRECUENTE;
-        }else{
-            return false;
-        }
-    }
-    // OBJETIVO -> HACER QUE ORQUESTADOR TENGA UN MAP <TipoCLiente (hacer metodo retorne frecuente o invitado en cada servicio), Servicio>
+    // OBJETIVO -> HACER QUE ORQUESTADOR TENGA UN MAP <TipoCLiente (hacer metodo retorne frecuente o invitado en cada servicio), Servicio> servicios en el constructor
     // EJECUTE LOS MÉTODOS DE LA CLASE ABSTRACTA SERVICIOCLIENTE SEGÚN EL ID DEL CLIENTE
-    // CON ESE ID DE CLIENTE BUSCARÁ CON EL METODO DE ARRIBA ELLTIPO DE ESE CLIENTE
-    // CON EL TIPO DE ESE CLIENTE HARÁ UN servicios.get(tipo_cliente).metodo PARA ASI EJECUTAR EL METODO
+    // CON ESE ID DE CLIENTE BUSCARÁ CON EL METODO DE ARRIBA (obtenerTipoCliente) ELLTIPO DE ESE CLIENTE
+    // CON EL TIPO DE ESE CLIENTE HARÁ UN servicios.get(tipo_cliente).metodo() PARA ASI EJECUTAR EL METODO
     // DEL SERVICIO QUE ESE .GET RETORNE
-
-    @Override
-    public boolean aplicarPara(TipoCliente tipoCliente) {
-        return tipoCliente == TipoCliente.FRECUENTE;
-    }
 
 
     //Unicamente validar que el monto sea diferente a cero, validar que el tipo sea congruente con el valor

@@ -30,10 +30,10 @@ public class ControladorCliente {
     @PostMapping("/registrar")
     public ResponseEntity<ClienteDTO> registrarCliente(@Valid @RequestBody ClienteRegistroDTO clienteRegistroDTO){
 
-        //Usa el mètodo implementado por el servicio correcto
+        //Usa el metodo implementado por el servicio correcto
         return ResponseEntity.ok(
                 orquestador
-                        .seleccionarServicio(clienteRegistroDTO.tipo_cliente())
+                        .seleccionarServicioActual(clienteRegistroDTO.tipo_cliente())
                         .registrarCliente(clienteRegistroDTO)
         );
     }
@@ -43,7 +43,7 @@ public class ControladorCliente {
     public ResponseEntity<ClienteDTO> actualizarCliente(@Valid @RequestBody ClienteDTO clienteDTO){
         return ResponseEntity.ok(
                 orquestador.
-                        seleccionarServicioActual(clienteDTO.id_cliente()).
+                        seleccionarServicioActual(clienteDTO.tipo_cliente()).
                         actualizarCliente(clienteDTO)
         );
     }
@@ -52,7 +52,7 @@ public class ControladorCliente {
     public ResponseEntity<ConfirmacionDTO> eliminarCliente(@Valid @RequestBody ClienteDTO clienteDTO){
         return ResponseEntity.ok(
                 orquestador
-                        .seleccionarServicio(clienteDTO.tipo_cliente())
+                        .seleccionarServicioActual(clienteDTO.tipo_cliente())
                         .eliminarCliente(clienteDTO)
         );
     }
@@ -65,7 +65,7 @@ public class ControladorCliente {
     ){
 
         return ResponseEntity.ok(
-                orquestador.seleccionarServicio(TipoCliente.FRECUENTE)
+                orquestador.seleccionarServicioActual(TipoCliente.FRECUENTE)
                         .busquedaCliente(nombre)
         );
     }
@@ -75,7 +75,7 @@ public class ControladorCliente {
     public ResponseEntity<ConfirmacionDTO> pagarDeuda(@Valid @RequestBody ClienteDTO clienteDTO){
         return ResponseEntity.ok(
                 orquestador
-                        .seleccionarServicio(clienteDTO.id_cliente(), clienteDTO.tipo_cliente())
+                        .seleccionarServicioActual(clienteDTO.tipo_cliente())
                         .pagarDeuda(clienteDTO)
         );
     }
@@ -85,7 +85,7 @@ public class ControladorCliente {
     public ResponseEntity<MontoDeClienteDTO> agregarMonto(@Valid @RequestBody MontoDTO montoDTO){
         return ResponseEntity.ok(
                 orquestador
-                        .obtenerServicioPorId(montoDTO.id_cliente())
+                        .seleccionarServicioActual(montoDTO.id_cliente())
                         .gestionarOperacionMonto(montoDTO)
         );
     }
