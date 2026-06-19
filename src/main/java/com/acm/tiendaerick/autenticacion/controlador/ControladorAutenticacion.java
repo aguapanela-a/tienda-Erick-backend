@@ -6,10 +6,7 @@ import com.acm.tiendaerick.autenticacion.servicio.AutenticacionServicio;
 import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.acm.tiendaerick.autenticacion.authDTO.NuevaContraDTO;
 
 @RestController
@@ -27,7 +24,7 @@ public class ControladorAutenticacion {
         return  ResponseEntity.ok(autenticacionServicio.login(loginDTO));
     }
 
-    @PostMapping("/cambiarContrasena")
+    @PutMapping("/cambiarContrasena")
     public ResponseEntity<String> cambiarContrasena(@Valid @RequestBody NuevaContraDTO dto){
         return ResponseEntity.ok(autenticacionServicio.cambiarContrasena(dto));
     }

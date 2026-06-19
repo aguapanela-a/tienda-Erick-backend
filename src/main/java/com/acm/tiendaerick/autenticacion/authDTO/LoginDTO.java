@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record LoginDTO(
-        @NotNull(message = "El numero de telefono no puede ser nulo")
+        @NotNull(message = "El numero de teléfono no puede ser nulo")
         String numeroTelefono,
 
         @NotNull
