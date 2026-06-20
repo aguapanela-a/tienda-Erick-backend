@@ -85,7 +85,7 @@ public class ControladorCliente {
     public ResponseEntity<MontoDeClienteDTO> agregarMonto(@Valid @RequestBody MontoDTO montoDTO){
         return ResponseEntity.ok(
                 orquestador
-                        .seleccionarServicioActual(montoDTO.id_cliente())
+                        .seleccionarServicioActual(montoDTO.tipo_cliente())
                         .gestionarOperacionMonto(montoDTO)
         );
     }

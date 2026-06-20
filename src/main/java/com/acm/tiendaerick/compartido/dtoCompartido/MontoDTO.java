@@ -2,8 +2,10 @@ package com.acm.tiendaerick.compartido.dtoCompartido;
 
 import java.math.BigDecimal;
 
+import com.acm.tiendaerick.paqueteClientes.tipoEnum.TipoCliente;
 import com.acm.tiendaerick.paqueteMontos.tipoEnum.TipoMonto;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -21,6 +23,9 @@ public record MontoDTO(
         TipoMonto tipo_monto,
 
         @NotBlank(message = "La fecha del monto no puede estar vacía")
-        String fecha
+        String fecha,
+
+        @Nullable
+        TipoCliente tipo_cliente
 )
 {}

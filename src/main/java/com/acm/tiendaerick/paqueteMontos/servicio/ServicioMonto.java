@@ -93,7 +93,8 @@ public class ServicioMonto {
                                 entidad.getDescripcion(),
                                 entidad.getValor(),
                                 entidad.getTipo(),
-                                convLocalDateString(entidad.getFecha())
+                                convLocalDateString(entidad.getFecha()),
+                                null
                         ))
                         .collect(Collectors.toList());
     }

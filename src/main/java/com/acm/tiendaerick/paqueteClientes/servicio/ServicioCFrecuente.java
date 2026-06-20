@@ -86,11 +86,11 @@ public class ServicioCFrecuente extends ServicioCliente {
         servicioMonto.borrarTodosLosMontos(cliente.id_cliente());
 
         //crear nuevo registro tipo deuda
-        MontoDTO montoDeudaDTO = new MontoDTO(cliente.id_cliente(), "Consolidación de deuda anterior", deudaActual, TipoMonto.DEUDA, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        MontoDTO montoDeudaDTO = new MontoDTO(cliente.id_cliente(), "Consolidación de deuda anterior", deudaActual, TipoMonto.DEUDA, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")), null);
         gestionarOperacionMonto(montoDeudaDTO);
 
         //crear nuevo registro tipo abono
-        MontoDTO montoAbonoDTO = new MontoDTO(cliente.id_cliente(), "Se realizó el pago completo de la deuda", deudaActual.negate(), TipoMonto.ABONO, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString());
+        MontoDTO montoAbonoDTO = new MontoDTO(cliente.id_cliente(), "Se realizó el pago completo de la deuda", deudaActual.negate(), TipoMonto.ABONO, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")), null);
         gestionarOperacionMonto(montoAbonoDTO);
 
         //Retorna el DTO de confirmación si toodo salió bien
