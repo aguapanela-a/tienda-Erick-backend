@@ -35,4 +35,8 @@ public class User {
     @Nullable
     @Enumerated(EnumType.STRING)
     private Rol rol;
+
+    @Column(unique = true)
+    private String refreshToken; // para almacenar el refresh accessToken asociado al usuario
+
 }

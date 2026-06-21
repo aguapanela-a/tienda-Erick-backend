@@ -1,5 +1,6 @@
 package com.acm.tiendaerick.autenticacion.servicio;
 
+import com.acm.tiendaerick.autenticacion.authDTO.AccessTokenDTO;
 import com.acm.tiendaerick.autenticacion.authDTO.LoginDTO;
 import com.acm.tiendaerick.autenticacion.authDTO.NuevaContraDTO;
 import com.acm.tiendaerick.autenticacion.authDTO.RespuestaDTO;
@@ -10,6 +11,8 @@ import com.acm.tiendaerick.compartido.seguridad.servicio.JwtServicio;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
 
 @Service
 public class AutenticacionServicio {
@@ -36,10 +39,17 @@ public class AutenticacionServicio {
             throw new ExcepcionesTienda("Contraseña incorrecta");
         }
 
-        //generar token con jwt
-        String token = jwtServicio.generateToken(user);
+        //generar accessToken con jwt (dura 1 hora)
+        String accessToken = jwtServicio.generateAccessToken(user);
 
-        return new RespuestaDTO(token, user.getNombre(), user.getId());
+        //generar refreshToken con jwt (dura 1 semana)
+        String refreshToken = jwtServicio.generateRefreshToken(user);
+
+        //asignar refreshToken al usuario y guardarlo en la base de datos
+        user.setRefreshToken(refreshToken);
+        servicioUsuario.guardarUsuario(user);
+
+        return new RespuestaDTO(accessToken, refreshToken, user.getNombre(), user.getId());
     }
 
     public String cambiarContrasena(NuevaContraDTO dto){
@@ -53,6 +63,27 @@ public class AutenticacionServicio {
 
         // Si fue correcta, cambiar la contraseña a la nueva
         return  servicioUsuario.cambiarContrasena(dto.contrasenaNueva(), usuario);
+    }
+
+    public AccessTokenDTO refrescarToken(String tokenRefresh) throws ParseException, JOSEException {
+
+        //Verificar que sea un token de refresh
+        if(!jwtServicio.esTokenRefresh(tokenRefresh)){
+            throw new ExcepcionesTienda("El token proporcionado no es un refresh token válido");
+        }
+
+        //Validar token y extraer teléfono
+        String telefonoUserActual = jwtServicio.extraerTelefono(tokenRefresh);
+
+        //Validar que el refreshToken del usuario coincida con el proporcionado
+        if(!servicioUsuario.findByNumeroTelefono(telefonoUserActual).getRefreshToken().equals(tokenRefresh)){
+            throw new ExcepcionesTienda("El token de refresh no coincide con el registrado para el usuario");
+        }
+
+        //si es refres, es válido y coincide con el refreshToken del usuario, generar nuevo accessToken
+        String accessToken = jwtServicio.generateAccessToken(servicioUsuario.findByNumeroTelefono(telefonoUserActual));
+
+        return new AccessTokenDTO(accessToken);
     }
 
 }

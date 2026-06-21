@@ -35,14 +35,14 @@ public class FiltroJwt extends OncePerRequestFilter {
         // verifica que el encabezado sea Authorization
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response); // no tiene token, sigue (con el SecurityFilterChain de Spring)
+            filterChain.doFilter(request, response); // no tiene accessToken, sigue (con el SecurityFilterChain de Spring)
             return;
         }
-        //extraer el token del encabezado Authorization
+        //extraer el accessToken del encabezado Authorization
         String token = authHeader.substring(7);
 
         try{
-            //validar y extraer el telefono del token
+            //validar y extraer el telefono del accessToken
             String telefono = jwtServicio.extraerTelefono(token);
 
             //decirle a spring el usuario que está autenticado usando el telefono y una lista vacia de roles porque no necesitamos roles en este proyecto
@@ -51,7 +51,7 @@ public class FiltroJwt extends OncePerRequestFilter {
             //meter la autenticación al contexto de spring
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }catch (ExcepcionesTienda | JOSEException | ParseException e){
-            // Si el token es inválido, no autenticamos y dejamos que Spring maneje la respuesta (probablemente 401)
+            // Si el accessToken es inválido, no autenticamos y dejamos que Spring maneje la respuesta (probablemente 401)
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Toker inválido - "+ e.getMessage());
             return;
         }

@@ -54,4 +54,8 @@ public class ServicioUsuario {
     public User findByNumeroTelefono(String s) {
         return repositorioUsuario.findByNumeroTelefono(s).orElseThrow(() -> new ExcepcionesTienda("Usuario no encontrado"));
     }
+
+    public void guardarUsuario(User user) {
+        repositorioUsuario.save(user);
+    }
 }
