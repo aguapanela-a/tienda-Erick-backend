@@ -83,6 +83,7 @@ public class ControladorCliente {
 
     @PostMapping("/montos")
     public ResponseEntity<MontoDeClienteDTO> agregarMonto(@Valid @RequestBody MontoDTO montoDTO){
+        System.out.println("Recibiendo monto: " + montoDTO);
         return ResponseEntity.ok(
                 orquestador
                         .seleccionarServicioActual(montoDTO.tipo_cliente())
