@@ -32,7 +32,7 @@ public class ControladorAutenticacion {
         return ResponseEntity.ok(autenticacionServicio.cambiarContrasena(dto));
     }
 
-    @GetMapping("/refrescarToken")
+    @PostMapping("/refrescarToken")
     public ResponseEntity<AccessTokenDTO> refrescarToken(@RequestParam String tokenRefresh) throws JOSEException, ParseException {
         return ResponseEntity.ok(autenticacionServicio.refrescarToken(tokenRefresh));
     }
